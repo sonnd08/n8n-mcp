@@ -32,7 +32,7 @@ Before generating any JSON or Javascript code for n8n, you must present a detail
 ### 4. Finalization
 *   Once approved, generate the **complete** JSON content.
 *   Ensure the JSON is valid and ready for import into n8n.
-*   If using the `n8n-mcp` tools, use `deploy_workflow.js` or `create_workflow_impl.js` logic where appropriate, but prefer delivering the JSON for the user to import if direct access is risky.
+*   If using the `n8n-mcp` tools, **USE** them to deploy automatically (`deploy_workflow.js`, `create_workflow_impl.js`) once the plan is approved. Manual import is a fallback only.
 
 ---
 
