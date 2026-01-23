@@ -1,5 +1,5 @@
 {
-    "name": "WhatsApp Status Polling (Evolution API)",
+    "name": "WhatsApp Status Polling (Evolution API) v2",
     "nodes": [
         {
             "parameters": {
@@ -149,6 +149,7 @@
             ],
             "id": "evo-send-text",
             "name": "Send Text Story",
+            "onError": "continueErrorOutput",
             "credentials": {
                 "evolutionApi": {
                     "id": "uFLlpp0hjQkOnZnJ",
@@ -176,6 +177,7 @@
             ],
             "id": "evo-send-image",
             "name": "Send Image Story",
+            "onError": "continueErrorOutput",
             "credentials": {
                 "evolutionApi": {
                     "id": "uFLlpp0hjQkOnZnJ",
@@ -203,6 +205,7 @@
             ],
             "id": "evo-send-video",
             "name": "Send Video Story",
+            "onError": "continueErrorOutput",
             "credentials": {
                 "evolutionApi": {
                     "id": "uFLlpp0hjQkOnZnJ",
@@ -213,17 +216,38 @@
         {
             "parameters": {
                 "operation": "executeQuery",
-                "query": "UPDATE whatsapp_statuses SET status = 'sent' WHERE id = '{{ $json.id }}';",
+                "query": "UPDATE whatsapp_statuses SET status = 'sent', published_at = NOW() WHERE id = '{{ $json.id || $node['Fetch Pending Statuses'].json.id }}';",
                 "options": {}
             },
             "type": "n8n-nodes-base.postgres",
             "typeVersion": 2.4,
             "position": [
-                1050,
-                0
+                1150,
+                -50
             ],
-            "id": "postgres-update-sent",
+            "id": "update-success",
             "name": "Mark as Sent",
+            "credentials": {
+                "postgres": {
+                    "id": "POSTGRES_CRED_ID",
+                    "name": "Supabase Postgres"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "UPDATE whatsapp_statuses SET status = 'error', error_message = '{{ $json.error?.message || \"Unknown Error\" }}' WHERE id = '{{ $node['Fetch Pending Statuses'].json.id }}';",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2.4,
+            "position": [
+                1150,
+                150
+            ],
+            "id": "update-error",
+            "name": "Mark as Error",
             "credentials": {
                 "postgres": {
                     "id": "POSTGRES_CRED_ID",
@@ -288,6 +312,13 @@
                         "type": "main",
                         "index": 0
                     }
+                ],
+                [
+                    {
+                        "node": "Mark as Error",
+                        "type": "main",
+                        "index": 0
+                    }
                 ]
             ]
         },
@@ -299,6 +330,13 @@
                         "type": "main",
                         "index": 0
                     }
+                ],
+                [
+                    {
+                        "node": "Mark as Error",
+                        "type": "main",
+                        "index": 0
+                    }
                 ]
             ]
         },
@@ -307,6 +345,13 @@
                 [
                     {
                         "node": "Mark as Sent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Mark as Error",
                         "type": "main",
                         "index": 0
                     }
