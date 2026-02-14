@@ -1,0 +1,400 @@
+﻿Fetching workflow: Xxv14Eqn5p2qb9E6
+{
+  "updatedAt": "2025-12-17T15:43:22.187Z",
+  "createdAt": "2025-12-17T15:36:33.092Z",
+  "id": "Xxv14Eqn5p2qb9E6",
+  "name": "SEO Data Extractor",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "seo-analysis",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "webhook-node",
+      "name": "Webhook Trigger",
+      "webhookId": "c7007130-51f2-48d5-b96a-02f62d2aed00"
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        512,
+        208
+      ],
+      "id": "google-gemini-model",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "",
+          "name": "Google Gemini API Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=### ROLE\nYou are a Senior SEO Strategist and Conversion Rate Optimization (CRO) Expert specializing in \"Rank and Rent\" local service websites for the Argentine market.\n\n### TASK\nAnalyze the provided SERP Data. Compare the content found in the top competitors against your internal expert knowledge of what a perfect, comprehensive service page should contain.\n\n### INPUT DATA\n1. Target Keyword/Niche: {{ $(\"Webhook Trigger\").item.json.body.keyword }}\n2. Location: Argentina (gl: ar)\n3. SERP Data (Competitors): {{ JSON.stringify($json) }}\n\n### ANALYSIS LOGIC\n1. **Identify Entities Found:** What topics are the competitors already covering?\n2. **Identify TRUE GAPS:** Based on your expert knowledge of the trade (e.g., specific tools, regulations, common emergency pain points in Argentina), what are the competitors FAILING to mention? These are my opportunities.\n3. **Interactive Tool Ideation:** Propose a logic-based \"Micro-Tool\" (Calculator, Quiz, Estimator) specific to this niche that helps the user solve a specific doubt regarding price or quantity.\n\n### OUTPUT FORMAT\nReturn ONLY a raw JSON object. No markdown, no intro.\nUse this schema:\n\n{\n  \"analysis_summary\": {\n    \"niche_difficulty\": \"Low/Medium/High\",\n    \"search_intent\": \"Informational/Transactional\"\n  },\n  \"semantic_profile\": {\n    \"core_entities_found\": [\"Array of strings\"],\n    \"missing_semantic_gaps\": [\"Array of strings: Critical topics NOT found in SERP\"],\n    \"local_nuances\": [\"Array of strings: Rioplatense terms to use (e.g., 'Flete', 'Cochera', 'Presupuesto')\"]\n  },\n  \"content_strategy\": {\n    \"recommended_h1\": \"String\",\n    \"structure_outline\": [\n      {\n        \"heading_level\": \"H2\",\n        \"title\": \"String\",\n        \"content_instructions\": \"String: How to fill the gap here\"\n      }\n    ]\n  },\n  \"interactive_tool_suggestion\": {\n    \"tool_name\": \"String (e.g., 'Calculadora de Materiales')\",\n    \"tool_goal\": \"String (What problem does it solve?)\",\n    \"required_inputs\": [\"Array of strings: What does the user need to enter? e.g., 'Ancho', 'Largo', 'Tipo de Material'\"],\n    \"logic_description\": \"String: How to calculate the result based on inputs\"\n  }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        512,
+        0
+      ],
+      "id": "ai-agent-chain",
+      "name": "SEO Strategist Agent"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawOutput = items[0].json.text || \"\";\n// Remove markdown code blocks if present\nconst cleanJson = rawOutput.replace(/```json/g, \"\").replace(/```/g, \"\").trim();\n\ntry {\n  const parsed = JSON.parse(cleanJson);\n  return { json: parsed };\n} catch (e) {\n  return { \n    json: { \n      error: \"Failed to parse JSON from AI response\", \n      raw_output: rawOutput \n    } \n  };\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        0
+      ],
+      "id": "cleanup-json-node",
+      "name": "Clean JSON"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1104,
+        0
+      ],
+      "id": "response-node",
+      "name": "Send API Response"
+    },
+    {
+      "parameters": {
+        "operation": "google_local",
+        "additionalFields": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-serpapi.serpApi",
+      "typeVersion": 1,
+      "position": [
+        144,
+        144
+      ],
+      "id": "2b972638-b0e4-400c-82cf-95de17f3356e",
+      "name": "Google_local search",
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "SEO Strategist Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "SEO Strategist Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO Strategist Agent": {
+      "main": [
+        [
+          {
+            "node": "Clean JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean JSON": {
+      "main": [
+        [
+          {
+            "node": "Send API Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google_local search": {
+      "main": [
+        [
+          {
+            "node": "SEO Strategist Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true,
+    "timeSavedMode": "fixed",
+    "executionOrder": "v0"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "6fdaa74e-ace9-4850-9b9e-ad427d4bb018",
+  "activeVersionId": "6fdaa74e-ace9-4850-9b9e-ad427d4bb018",
+  "versionCounter": 14,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-12-17T15:36:33.096Z",
+      "createdAt": "2025-12-17T15:36:33.096Z",
+      "role": "workflow:owner",
+      "workflowId": "Xxv14Eqn5p2qb9E6",
+      "projectId": "CyuOAJo56zhDqPtw",
+      "project": {
+        "updatedAt": "2025-06-20T00:19:40.019Z",
+        "createdAt": "2025-06-19T22:02:37.058Z",
+        "id": "CyuOAJo56zhDqPtw",
+        "name": "malco fernandez <malcofernandez@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "updatedAt": "2025-06-19T22:02:37.058Z",
+            "createdAt": "2025-06-19T22:02:37.058Z",
+            "userId": "f69c1801-dfb0-4d19-b972-317a699ae6ec",
+            "projectId": "CyuOAJo56zhDqPtw",
+            "user": {
+              "updatedAt": "2025-12-17T13:36:15.000Z",
+              "createdAt": "2025-06-19T22:02:36.720Z",
+              "id": "f69c1801-dfb0-4d19-b972-317a699ae6ec",
+              "email": "malcofernandez@gmail.com",
+              "firstName": "malco",
+              "lastName": "fernandez",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-06-20T00:19:48.291Z",
+                "personalization_survey_n8n_version": "1.98.2",
+                "companyType": "saas"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "3vZyObH9koXfTnp8",
+                "userActivatedAt": 1750524045766,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1753208867750
+                },
+                "easyAIWorkflowOnboarded": true,
+                "dismissedCallouts": {
+                  "aiAgentStarterCallout": true
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-12-17",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": {
+    "updatedAt": "2025-12-17T15:43:22.189Z",
+    "createdAt": "2025-12-17T15:43:22.189Z",
+    "versionId": "6fdaa74e-ace9-4850-9b9e-ad427d4bb018",
+    "workflowId": "Xxv14Eqn5p2qb9E6",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "seo-analysis",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          0,
+          0
+        ],
+        "id": "webhook-node",
+        "name": "Webhook Trigger",
+        "webhookId": "c7007130-51f2-48d5-b96a-02f62d2aed00"
+      },
+      {
+        "parameters": {
+          "options": {
+            "temperature": 0.2
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          512,
+          208
+        ],
+        "id": "google-gemini-model",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "",
+            "name": "Google Gemini API Account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=### ROLE\nYou are a Senior SEO Strategist and Conversion Rate Optimization (CRO) Expert specializing in \"Rank and Rent\" local service websites for the Argentine market.\n\n### TASK\nAnalyze the provided SERP Data. Compare the content found in the top competitors against your internal expert knowledge of what a perfect, comprehensive service page should contain.\n\n### INPUT DATA\n1. Target Keyword/Niche: {{ $(\"Webhook Trigger\").item.json.body.keyword }}\n2. Location: Argentina (gl: ar)\n3. SERP Data (Competitors): {{ JSON.stringify($json) }}\n\n### ANALYSIS LOGIC\n1. **Identify Entities Found:** What topics are the competitors already covering?\n2. **Identify TRUE GAPS:** Based on your expert knowledge of the trade (e.g., specific tools, regulations, common emergency pain points in Argentina), what are the competitors FAILING to mention? These are my opportunities.\n3. **Interactive Tool Ideation:** Propose a logic-based \"Micro-Tool\" (Calculator, Quiz, Estimator) specific to this niche that helps the user solve a specific doubt regarding price or quantity.\n\n### OUTPUT FORMAT\nReturn ONLY a raw JSON object. No markdown, no intro.\nUse this schema:\n\n{\n  \"analysis_summary\": {\n    \"niche_difficulty\": \"Low/Medium/High\",\n    \"search_intent\": \"Informational/Transactional\"\n  },\n  \"semantic_profile\": {\n    \"core_entities_found\": [\"Array of strings\"],\n    \"missing_semantic_gaps\": [\"Array of strings: Critical topics NOT found in SERP\"],\n    \"local_nuances\": [\"Array of strings: Rioplatense terms to use (e.g., 'Flete', 'Cochera', 'Presupuesto')\"]\n  },\n  \"content_strategy\": {\n    \"recommended_h1\": \"String\",\n    \"structure_outline\": [\n      {\n        \"heading_level\": \"H2\",\n        \"title\": \"String\",\n        \"content_instructions\": \"String: How to fill the gap here\"\n      }\n    ]\n  },\n  \"interactive_tool_suggestion\": {\n    \"tool_name\": \"String (e.g., 'Calculadora de Materiales')\",\n    \"tool_goal\": \"String (What problem does it solve?)\",\n    \"required_inputs\": [\"Array of strings: What does the user need to enter? e.g., 'Ancho', 'Largo', 'Tipo de Material'\"],\n    \"logic_description\": \"String: How to calculate the result based on inputs\"\n  }\n}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.4,
+        "position": [
+          512,
+          0
+        ],
+        "id": "ai-agent-chain",
+        "name": "SEO Strategist Agent"
+      },
+      {
+        "parameters": {
+          "jsCode": "const rawOutput = items[0].json.text || \"\";\n// Remove markdown code blocks if present\nconst cleanJson = rawOutput.replace(/```json/g, \"\").replace(/```/g, \"\").trim();\n\ntry {\n  const parsed = JSON.parse(cleanJson);\n  return { json: parsed };\n} catch (e) {\n  return { \n    json: { \n      error: \"Failed to parse JSON from AI response\", \n      raw_output: rawOutput \n    } \n  };\n}"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          864,
+          0
+        ],
+        "id": "cleanup-json-node",
+        "name": "Clean JSON"
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ $json }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.1,
+        "position": [
+          1104,
+          0
+        ],
+        "id": "response-node",
+        "name": "Send API Response"
+      },
+      {
+        "parameters": {
+          "operation": "google_local",
+          "additionalFields": {},
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-serpapi.serpApi",
+        "typeVersion": 1,
+        "position": [
+          144,
+          144
+        ],
+        "id": "2b972638-b0e4-400c-82cf-95de17f3356e",
+        "name": "Google_local search",
+        "disabled": true
+      }
+    ],
+    "connections": {
+      "Webhook Trigger": {
+        "main": [
+          [
+            {
+              "node": "SEO Strategist Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "SEO Strategist Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SEO Strategist Agent": {
+        "main": [
+          [
+            {
+              "node": "Clean JSON",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Clean JSON": {
+        "main": [
+          [
+            {
+              "node": "Send API Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google_local search": {
+        "main": [
+          [
+            {
+              "node": "SEO Strategist Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "malco fernandez",
+    "name": null,
+    "description": null
+  }
+}

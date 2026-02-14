@@ -1,0 +1,15 @@
+﻿Fetching workflows from https://n8n.cr-sites.com...
+
+--- Workflows ---
+- Leads R&R (ID: 3vZyObH9koXfTnp8) [Active: true]
+- Lista limpia (ID: 5mdeSznQUBSQro5k) [Active: false]
+- Demo: RAG in n8n (ID: 94x7SAJKgaOgB3Cf) [Active: false]
+- chatbot-pizza-order (ID: 9rIUHbeYPtzAAB8P) [Active: false]
+- n8n-chat-conversational (ID: P7inH2L4zFOJD4p9) [Active: false]
+- Gestor de Gastos (ID: QO38vJeFnnqWKYlc) [Active: false]
+- My workflow (ID: RpTYO3XGVfE22Xen) [Active: false]
+- Samir -> Allpol (ID: SGmT1MGfmsJESHdf) [Active: false]
+- Posts (ID: SfQJmSJ5vD20IhA3) [Active: false]
+- elevenlabs-voice-rag-chatbot (ID: UOROJVckENkpujTr) [Active: false]
+-----------------
+

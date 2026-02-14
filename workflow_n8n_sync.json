@@ -1,0 +1,291 @@
+{
+    "name": "Sync Project - Sync Now",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "sync-webhook",
+                "options": {}
+            },
+            "id": "webhook-trigger",
+            "name": "Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "values": {
+                    "string": [
+                        {
+                            "name": "supabase_url",
+                            "value": "https://qvxxhwcspqntdesrajph.supabase.co"
+                        },
+                        {
+                            "name": "supabase_key",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF2eHhod2NzcHFudGRlc3JhanBoIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjQyOTI2MCwiZXhwIjoyMDgyMDA1MjYwfQ.wpVpE0i-KYtaH-LTR4Ho9IXtg_TFTIxzkO7T4gWsnbY"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "set-auth",
+            "name": "Set Supabase Auth",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 1,
+            "position": [
+                200,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "={{\"SELECT * FROM sync_tasks WHERE id = '\" + $json.body.sync_id + \"'::uuid\"}}"
+            },
+            "id": "postgres-get-config",
+            "name": "Postgres Get Config",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                400,
+                0
+            ],
+            "credentials": {
+                "postgres": {
+                    "id": "POSTGRES_CREDENTIAL_ID_PLACEHOLDER",
+                    "name": "Postgres account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "sheetId": "={{$json.sheet_id}}",
+                "range": "={{$json.range_config}}",
+                "options": {}
+            },
+            "id": "google-sheets",
+            "name": "Google Sheets",
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 1,
+            "position": [
+                600,
+                0
+            ],
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "GOOGLE_SHEETS_CREDENTIAL_ID_PLACEHOLDER",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "={{$node[\"Set Supabase Auth\"].json[\"supabase_url\"]}}/storage/v1/object/public/templates/{{$node[\"Postgres Get Config\"].json[\"template_path\"]}}",
+                "options": {}
+            },
+            "id": "download-template",
+            "name": "Download Template",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 1,
+            "position": [
+                600,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const template = $items(\"Download Template\")[0].json.data;\nconst rows = $items(\"Google Sheets\");\n\nlet finalHtml = \"\";\n\n/* Iterate over Google Sheets rows and replace placeholders in template */\nfor (const row of rows) {\n  let rowHtml = typeof template === 'string' ? template : JSON.stringify(template);\n  \n  for (const key of Object.keys(row.json)) {\n    // Replace {{ColumnName}} with value\n    // Using simple replace (first occurrence) or global regex\n    const val = row.json[key];\n    if (val !== undefined && val !== null) {\n       rowHtml = rowHtml.split('{{' + key + '}}').join(val);\n    }\n  }\n  finalHtml += rowHtml + \"\\n\";\n}\n\nreturn [{ json: { html: finalHtml, count: rows.length } }];"
+            },
+            "id": "process-template",
+            "name": "Process Template",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                800,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{$node[\"Set Supabase Auth\"].json[\"supabase_url\"]}}/storage/v1/object/public-sites/{{$node[\"Postgres Get Config\"].json[\"output_path\"]}}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "text/html"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer {{$node[\"Set Supabase Auth\"].json[\"supabase_key\"]}}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "contentType": "raw",
+                "rawContentType": "text/html",
+                "body": "={{$json.html}}",
+                "options": {}
+            },
+            "id": "upload-result",
+            "name": "Upload Result",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 1,
+            "position": [
+                1000,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "={{\"UPDATE sync_tasks SET last_update = NOW(), last_action_log = 'Sincronización Exitosa: \" + $json.count + \" filas procesadas.' WHERE id = '\" + $node[\"Webhook\"].json.body.sync_id + \"'::uuid\"}}"
+            },
+            "id": "update-success",
+            "name": "Update Success",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                1200,
+                0
+            ],
+            "credentials": {
+                "postgres": {
+                    "id": "POSTGRES_CREDENTIAL_ID_PLACEHOLDER",
+                    "name": "Postgres account"
+                }
+            }
+        },
+        {
+            "parameters": {},
+            "id": "error-trigger",
+            "name": "Error Trigger",
+            "type": "n8n-nodes-base.errorTrigger",
+            "typeVersion": 1,
+            "position": [
+                400,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "={{\"UPDATE sync_tasks SET last_action_log = 'Error: \" + $execution.error.message.replace(/'/g, \"''\") + \"' WHERE id = '\" + $node[\"Webhook\"].json.body.sync_id + \"'::uuid\"}}"
+            },
+            "id": "update-error",
+            "name": "Update Error",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                600,
+                400
+            ],
+            "credentials": {
+                "postgres": {
+                    "id": "POSTGRES_CREDENTIAL_ID_PLACEHOLDER",
+                    "name": "Postgres account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Set Supabase Auth",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set Supabase Auth": {
+            "main": [
+                [
+                    {
+                        "node": "Postgres Get Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Postgres Get Config": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Download Template",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Sheets": {
+            "main": [
+                [
+                    {
+                        "node": "Process Template",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Download Template": {
+            "main": [
+                [
+                    {
+                        "node": "Process Template",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Process Template": {
+            "main": [
+                [
+                    {
+                        "node": "Upload Result",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Upload Result": {
+            "main": [
+                [
+                    {
+                        "node": "Update Success",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Error Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Update Error",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

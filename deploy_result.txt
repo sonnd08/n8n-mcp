@@ -1,0 +1,7 @@
+﻿Deleting old workflow: Xxv14Eqn5p2qb9E6
+Delete result: Failed to delete workflow: Not Found
+Creating new workflow...
+SUCCESS! Workflow created.
+ID: bvaCStLr4DxjOvCs
+Active: false
+Name: SEO Data Extractor

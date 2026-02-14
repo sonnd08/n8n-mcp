@@ -1,0 +1,362 @@
+{
+    "name": "WhatsApp Status Polling (Evolution API) v2",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "minutes",
+                            "minutesInterval": 5
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "schedule-trigger",
+            "name": "Every 5 Minutes"
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "SELECT * FROM whatsapp_statuses WHERE status = 'pending' ORDER BY created_at ASC LIMIT 5;",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2.4,
+            "position": [
+                220,
+                0
+            ],
+            "id": "postgres-get-pending",
+            "name": "Fetch Pending Statuses",
+            "credentials": {
+                "postgres": {
+                    "id": "POSTGRES_CRED_ID",
+                    "name": "Supabase Postgres"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.type }}",
+                                        "rightValue": "text",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "Text"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.type }}",
+                                        "rightValue": "image",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "Image"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.type }}",
+                                        "rightValue": "video",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "Video"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.2,
+            "position": [
+                480,
+                0
+            ],
+            "id": "check-type",
+            "name": "Check Type"
+        },
+        {
+            "parameters": {
+                "resource": "messages-api",
+                "operation": "send-stories",
+                "type": "text",
+                "instanceName": "Malco ARG",
+                "messageText": "={{ $json.content }}",
+                "options_message": {
+                    "backgroundColor": "#000000",
+                    "font": 1,
+                    "allContacts": true
+                }
+            },
+            "type": "n8n-nodes-evolution-api.evolutionApi",
+            "typeVersion": 1,
+            "position": [
+                750,
+                -150
+            ],
+            "id": "evo-send-text",
+            "name": "Send Text Story",
+            "onError": "continueErrorOutput",
+            "credentials": {
+                "evolutionApi": {
+                    "id": "uFLlpp0hjQkOnZnJ",
+                    "name": "Evolution 5492216115728 - Malco ARG"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "messages-api",
+                "operation": "send-stories",
+                "type": "image",
+                "instanceName": "Malco ARG",
+                "mediaUrl": "={{ $json.content }}",
+                "caption": "={{ $json.caption }}",
+                "options_message": {
+                    "allContacts": true
+                }
+            },
+            "type": "n8n-nodes-evolution-api.evolutionApi",
+            "typeVersion": 1,
+            "position": [
+                750,
+                0
+            ],
+            "id": "evo-send-image",
+            "name": "Send Image Story",
+            "onError": "continueErrorOutput",
+            "credentials": {
+                "evolutionApi": {
+                    "id": "uFLlpp0hjQkOnZnJ",
+                    "name": "Evolution 5492216115728 - Malco ARG"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "messages-api",
+                "operation": "send-stories",
+                "type": "video",
+                "instanceName": "Malco ARG",
+                "mediaUrl": "={{ $json.content }}",
+                "caption": "={{ $json.caption }}",
+                "options_message": {
+                    "allContacts": true
+                }
+            },
+            "type": "n8n-nodes-evolution-api.evolutionApi",
+            "typeVersion": 1,
+            "position": [
+                750,
+                150
+            ],
+            "id": "evo-send-video",
+            "name": "Send Video Story",
+            "onError": "continueErrorOutput",
+            "credentials": {
+                "evolutionApi": {
+                    "id": "uFLlpp0hjQkOnZnJ",
+                    "name": "Evolution 5492216115728 - Malco ARG"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "UPDATE whatsapp_statuses SET status = 'sent', published_at = NOW() WHERE id = '{{ $json.id || $node['Fetch Pending Statuses'].json.id }}';",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2.4,
+            "position": [
+                1150,
+                -50
+            ],
+            "id": "update-success",
+            "name": "Mark as Sent",
+            "credentials": {
+                "postgres": {
+                    "id": "POSTGRES_CRED_ID",
+                    "name": "Supabase Postgres"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "UPDATE whatsapp_statuses SET status = 'error', error_message = '{{ $json.error?.message || \"Unknown Error\" }}' WHERE id = '{{ $node['Fetch Pending Statuses'].json.id }}';",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2.4,
+            "position": [
+                1150,
+                150
+            ],
+            "id": "update-error",
+            "name": "Mark as Error",
+            "credentials": {
+                "postgres": {
+                    "id": "POSTGRES_CRED_ID",
+                    "name": "Supabase Postgres"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Every 5 Minutes": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch Pending Statuses",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch Pending Statuses": {
+            "main": [
+                [
+                    {
+                        "node": "Check Type",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check Type": {
+            "main": [
+                [
+                    {
+                        "node": "Send Text Story",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Send Image Story",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Send Video Story",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Send Text Story": {
+            "main": [
+                [
+                    {
+                        "node": "Mark as Sent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Mark as Error",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Send Image Story": {
+            "main": [
+                [
+                    {
+                        "node": "Mark as Sent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Mark as Error",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Send Video Story": {
+            "main": [
+                [
+                    {
+                        "node": "Mark as Sent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Mark as Error",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

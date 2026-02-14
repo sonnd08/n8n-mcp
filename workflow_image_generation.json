@@ -1,0 +1,252 @@
+{
+    "name": "Image Generation Mockup (Replicate)",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "generate-mockup",
+                "options": {}
+            },
+            "name": "Webhook Trigger",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                460,
+                300
+            ],
+            "id": "webhook-trigger"
+        },
+        {
+            "parameters": {
+                "url": "https://api.replicate.com/v1/predictions",
+                "method": "POST",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Token {{ $env.REPLICATE_API_TOKEN }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "version",
+                            "value": "SET_REPLICATE_MODEL_VERSION_HERE"
+                        },
+                        {
+                            "name": "input",
+                            "value": "={{ {\n  \"prompt\": \"Hyper-realistic polyethylene \" + $json.body.product_type + \" bag, \" + $json.body.base_color + \" plastic texture, wrinkles, studio lighting, professional photography product shot. \" + $json.body.prompt_description,\n  \"image\": $json.body.logo_url,\n  \"controlnet_conditioning_scale\": 0.6\n} }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "name": "Replicate Predict",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                680,
+                300
+            ],
+            "id": "replicate-predict"
+        },
+        {
+            "parameters": {
+                "amount": 5,
+                "unit": "seconds"
+            },
+            "name": "Wait 5s",
+            "type": "n8n-nodes-base.wait",
+            "typeVersion": 1,
+            "position": [
+                900,
+                300
+            ],
+            "id": "wait-loop"
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.urls.get }}",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Token {{ $env.REPLICATE_API_TOKEN }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "name": "Check Status",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                1120,
+                300
+            ],
+            "id": "check-status"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "string": [
+                        {
+                            "value1": "={{ $json.status }}",
+                            "value2": "succeeded"
+                        }
+                    ]
+                }
+            },
+            "name": "Is Completed?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                1340,
+                300
+            ],
+            "id": "is-completed"
+        },
+        {
+            "parameters": {
+                "url": "={{ $node[\"Webhook Trigger\"].json.body.app_callback_url || \"http://localhost:3000/api/webhook/receive-result/\" }}",
+                "method": "POST",
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "request_id",
+                            "value": "={{ $node[\"Webhook Trigger\"].json.body.request_id }}"
+                        },
+                        {
+                            "name": "image_url",
+                            "value": "={{ $json.output }}"
+                        },
+                        {
+                            "name": "status",
+                            "value": "completed"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "name": "Callback to App",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                1600,
+                200
+            ],
+            "id": "callback-app"
+        },
+        {
+            "parameters": {},
+            "name": "Error Trigger",
+            "type": "n8n-nodes-base.errorTrigger",
+            "typeVersion": 1,
+            "position": [
+                460,
+                600
+            ],
+            "id": "error-trigger"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "name": "Log Error",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                680,
+                600
+            ],
+            "id": "log-error",
+            "parameters": {
+                "jsCode": "console.log(\"Workflow Failed:\", $input.all());\nreturn $input.all();"
+            }
+        }
+    ],
+    "connections": {
+        "Webhook Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Replicate Predict",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Replicate Predict": {
+            "main": [
+                [
+                    {
+                        "node": "Wait 5s",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Wait 5s": {
+            "main": [
+                [
+                    {
+                        "node": "Check Status",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check Status": {
+            "main": [
+                [
+                    {
+                        "node": "Is Completed?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Is Completed?": {
+            "main": [
+                [
+                    {
+                        "node": "Callback to App",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Wait 5s",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Error Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Log Error",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

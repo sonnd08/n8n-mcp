@@ -1,0 +1,9 @@
+Current directory: C:\Users\Andres Fernandez\Documents\Antigravity\n8n-mcp
+Looking for .env at: C:\Users\Andres Fernandez\Documents\Antigravity\n8n-mcp\.env
+File exists? true
+N8N_BASE_URL: https://n8n.cr-sites.com
+N8N_API_KEY Length: 207
+Snapshot of first 5 chars of API Key: eyJhb
+Axios Base URL: https://n8n.cr-sites.com/api/v1
+Testing connection...
+Connection SUCCESS! Workflows found: 40

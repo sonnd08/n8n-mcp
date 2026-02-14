@@ -1,0 +1,7 @@
+Getting workflow M41AzCPlhql4OhOe...
+Sending Update...
+❌ Error updating:
+400 Bad Request
+{
+  "message": "request/body must have required property 'settings'"
+}

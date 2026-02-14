@@ -1,0 +1,331 @@
+{
+    "name": "Leads R&R v2",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "leads-v2",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "webhook-node",
+            "name": "Webhook"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "name": "client_name",
+                            "value": "={{ $json.body.nombre || $json.body.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "name": "client_phone",
+                            "value": "={{ $json.body.telefono || $json.body.phone }}",
+                            "type": "string"
+                        },
+                        {
+                            "name": "message",
+                            "value": "={{ $json.body.mensaje || $json.body.message }}",
+                            "type": "string"
+                        },
+                        {
+                            "name": "source",
+                            "value": "={{ $json.body.source || $json.body.referrer }}",
+                            "type": "string"
+                        },
+                        {
+                            "name": "timestamp",
+                            "value": "={{ $now.toISO() }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                250,
+                0
+            ],
+            "id": "normalize-node",
+            "name": "Normalize Data"
+        },
+        {
+            "parameters": {
+                "operation": "create",
+                "base": {
+                    "__rl": true,
+                    "value": "app8jff881WWUr8Sl",
+                    "mode": "list",
+                    "cachedResultName": "Base de Datos - Leads"
+                },
+                "table": {
+                    "__rl": true,
+                    "value": "tblCq162vKS035OZf",
+                    "mode": "list",
+                    "cachedResultName": "leads"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "client_name": "={{ $json.client_name }}",
+                        "client_phone": "={{ $json.client_phone }}",
+                        "service_details": "={{ $json.message }}",
+                        "lead_source": "={{ $json.source }}",
+                        "timestamp": "={{ $json.timestamp }}",
+                        "status": "Nuevo"
+                    }
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.airtable",
+            "typeVersion": 2.1,
+            "position": [
+                500,
+                0
+            ],
+            "id": "airtable-create-node",
+            "name": "Create Lead (Nuevo)",
+            "credentials": {
+                "airtableTokenApi": {
+                    "id": "2zDfs1ZY0VzfVfyg",
+                    "name": "Airtable Personal Access Token account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.source }}",
+                                        "rightValue": "allpol",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "contains"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "Allpol"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.source }}",
+                                        "rightValue": "camarasseguridad",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "contains"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "Camaras CR"
+                        }
+                    ]
+                },
+                "options": {
+                    "fallbackOutput": "none"
+                }
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.2,
+            "position": [
+                750,
+                0
+            ],
+            "id": "router-node",
+            "name": "Route by Source"
+        },
+        {
+            "parameters": {
+                "resource": "messages-api",
+                "instanceName": "Allpol",
+                "remoteJid": "542216115728",
+                "messageText": "=🔔 *Nuevo Lead Allpol*\n\n👤 *Nombre*: {{ $json.client_name }}\n📱 *Tel*: {{ $json.client_phone }}\n📝 *Mensaje*: {{ $json.message }}\n🔗 *Fuente*: {{ $json.source }}",
+                "options_message": {}
+            },
+            "type": "n8n-nodes-evolution-api.evolutionApi",
+            "typeVersion": 1,
+            "position": [
+                1000,
+                -100
+            ],
+            "id": "notify-allpol",
+            "name": "Notify Allpol",
+            "credentials": {
+                "evolutionApi": {
+                    "id": "BcKApPoAEmD2PL5m",
+                    "name": "wsp Allpol - 221 6925658"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "messages-api",
+                "instanceName": "evolutionapi",
+                "remoteJid": "50662292932",
+                "messageText": "=🔔 *Nuevo Lead Camaras CR*\n\n👤 *Nombre*: {{ $json.client_name }}\n📱 *Tel*: {{ $json.client_phone }}\n📝 *Mensaje*: {{ $json.message }}\n🔗 *Fuente*: {{ $json.source }}",
+                "options_message": {}
+            },
+            "type": "n8n-nodes-evolution-api.evolutionApi",
+            "typeVersion": 1,
+            "position": [
+                1000,
+                100
+            ],
+            "id": "notify-malco-cr",
+            "name": "Notify Malco CR",
+            "credentials": {
+                "evolutionApi": {
+                    "id": "lgR3M6buNvrwBzQ0",
+                    "name": "Evolution 50662292932 - Malco CR"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "base": {
+                    "__rl": true,
+                    "value": "app8jff881WWUr8Sl",
+                    "mode": "list",
+                    "cachedResultName": "Base de Datos - Leads"
+                },
+                "table": {
+                    "__rl": true,
+                    "value": "tblCq162vKS035OZf",
+                    "mode": "list",
+                    "cachedResultName": "leads"
+                },
+                "id": "={{ $json.id }}",
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "status": "Notificado",
+                        "notified_timestamp": "={{ $now.toISO() }}"
+                    }
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.airtable",
+            "typeVersion": 2.1,
+            "position": [
+                1300,
+                0
+            ],
+            "id": "airtable-update-node",
+            "name": "Mark as Notified",
+            "credentials": {
+                "airtableTokenApi": {
+                    "id": "2zDfs1ZY0VzfVfyg",
+                    "name": "Airtable Personal Access Token account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Normalize Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Normalize Data": {
+            "main": [
+                [
+                    {
+                        "node": "Create Lead (Nuevo)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create Lead (Nuevo)": {
+            "main": [
+                [
+                    {
+                        "node": "Route by Source",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Route by Source": {
+            "main": [
+                [
+                    {
+                        "node": "Notify Allpol",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Notify Malco CR",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Notify Allpol": {
+            "main": [
+                [
+                    {
+                        "node": "Mark as Notified",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Notify Malco CR": {
+            "main": [
+                [
+                    {
+                        "node": "Mark as Notified",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

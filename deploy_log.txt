@@ -1,0 +1,839 @@
+Starting deployment...
+Tools imported
+Deploying workflow: Seguimientos Diarios Allpol...
+Result result:
+{
+  "success": true,
+  "data": {
+    "name": "Seguimientos Diarios Allpol",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 9
+              }
+            ]
+          }
+        },
+        "id": "schedule-trigger",
+        "name": "Cada día 9AM",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "client_followups",
+          "returnAll": true,
+          "filterType": "string",
+          "filterString": "scheduled_date=lte.{{ $now.format('yyyy-MM-dd') }}&status=eq.pending&select=*,clients(name,phone)",
+          "options": {}
+        },
+        "id": "supabase-get",
+        "name": "Get Followups Pendientes",
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          220,
+          0
+        ],
+        "credentials": {
+          "supabaseApi": {
+            "id": "supabase-creds",
+            "name": "Supabase Allpol"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "condition-check",
+                "leftValue": "={{ $input.all().length }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "gt"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "if-hay-pendientes",
+        "name": "¿Hay pendientes?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          440,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const followups = $input.all();\n\nconst today = new Date().toLocaleDateString('es-AR', { \n  weekday: 'long', \n  year: 'numeric', \n  month: 'long', \n  day: 'numeric' \n});\n\nlet message = `📅 *Seguimientos pendientes*\\n${today}\\n\\n`;\n\nconst typeEmojis = {\n  'reminder': '🔔',\n  'grouping': '📦',\n  'material': '🏭'\n};\n\nconst typeNames = {\n  'reminder': 'Recordatorio',\n  'grouping': 'Oportunidad de Agrupación',\n  'material': 'Material Disponible'\n};\n\nfollowups.forEach((item, index) => {\n  const f = item.json;\n  const emoji = typeEmojis[f.type] || '📌';\n  const typeName = typeNames[f.type] || f.type;\n  \n  // Calcular días de atraso\n  const schedDate = new Date(f.scheduled_date);\n  const todayDate = new Date();\n  const daysLate = Math.floor((todayDate - schedDate) / (1000 * 60 * 60 * 24));\n  const lateText = daysLate > 0 ? ` ⚠️ (${daysLate} días de atraso)` : '';\n  \n  message += `${index + 1}. ${emoji} *${f.clients?.name || 'Cliente'}*${lateText}\\n`;\n  message += `   _${typeName}_\\n`;\n  if (f.notes) message += `   📝 ${f.notes}\\n`;\n  if (f.product_reference) message += `   📦 ${f.product_reference}\\n`;\n  message += `   📱 ${f.clients?.phone || 'Sin teléfono'}\\n\\n`;\n});\n\nmessage += `─────────────────\\n`;\nmessage += `_Total: ${followups.length} seguimiento(s) pendiente(s)_\\n`;\nmessage += `\\n💡 _Abrí Allpol Gestión > Seguimientos para gestionar_`;\n\nreturn [{ json: { message, count: followups.length } }];"
+        },
+        "id": "code-format",
+        "name": "Formatear Mensaje",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          660,
+          -100
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://automatizacion-evolution-api.aq0vtr.easypanel.host/message/sendText/Allpol",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "apikey",
+                "value": "97D1DBC4C9E6-42E7-85E8-8E53D285C69E"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"number\": \"5492216925658@s.whatsapp.net\",\n  \"text\": {{ JSON.stringify($json.message) }}\n}",
+          "options": {}
+        },
+        "id": "http-whatsapp",
+        "name": "Enviar WhatsApp",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          880,
+          -100
+        ]
+      },
+      {
+        "parameters": {},
+        "id": "noop-end",
+        "name": "Sin pendientes",
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          660,
+          100
+        ]
+      }
+    ],
+    "connections": {
+      "Cada día 9AM": {
+        "main": [
+          [
+            {
+              "node": "Get Followups Pendientes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Followups Pendientes": {
+        "main": [
+          [
+            {
+              "node": "¿Hay pendientes?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "¿Hay pendientes?": {
+        "main": [
+          [
+            {
+              "node": "Formatear Mensaje",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Sin pendientes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Formatear Mensaje": {
+        "main": [
+          [
+            {
+              "node": "Enviar WhatsApp",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "America/Argentina/Buenos_Aires",
+      "callerPolicy": "workflowsFromSameOwner",
+      "availableInMCP": false
+    },
+    "active": false,
+    "versionId": "8d32ae1e-1623-4b2d-8f27-1779ff5ddc7e",
+    "id": "BIRRbowBQlGr4BmB",
+    "description": null,
+    "staticData": null,
+    "meta": null,
+    "pinData": null,
+    "activeVersionId": null,
+    "updatedAt": "2025-12-15T16:02:11.250Z",
+    "createdAt": "2025-12-15T16:02:11.250Z",
+    "isArchived": false,
+    "versionCounter": 1,
+    "triggerCount": 0
+  },
+  "message": "Workflow \"Seguimientos Diarios Allpol\" created successfully with ID: BIRRbowBQlGr4BmB"
+}
+Starting deployment...
+Tools imported
+Deploying workflow: Seguimientos Diarios Allpol...
+Result result:
+{
+  "success": true,
+  "data": {
+    "name": "Seguimientos Diarios Allpol",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 9
+              }
+            ]
+          }
+        },
+        "id": "schedule-trigger",
+        "name": "Cada día 9AM",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "client_followups",
+          "returnAll": true,
+          "filterType": "string",
+          "filterString": "scheduled_date=lte.{{ $now.format('yyyy-MM-dd') }}&status=eq.pending&select=*,clients(name,phone)",
+          "options": {}
+        },
+        "id": "supabase-get",
+        "name": "Get Followups Pendientes",
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          220,
+          0
+        ],
+        "credentials": {
+          "supabaseApi": {
+            "id": "supabase-creds",
+            "name": "Supabase Allpol"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "condition-check",
+                "leftValue": "={{ $input.all().length }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "gt"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "if-hay-pendientes",
+        "name": "¿Hay pendientes?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          440,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const followups = $input.all();\n\nconst today = new Date().toLocaleDateString('es-AR', { \n  weekday: 'long', \n  year: 'numeric', \n  month: 'long', \n  day: 'numeric' \n});\n\nlet message = `📅 *Seguimientos pendientes*\\n${today}\\n\\n`;\n\nconst typeEmojis = {\n  'reminder': '🔔',\n  'grouping': '📦',\n  'material': '🏭'\n};\n\nconst typeNames = {\n  'reminder': 'Recordatorio',\n  'grouping': 'Oportunidad de Agrupación',\n  'material': 'Material Disponible'\n};\n\nfollowups.forEach((item, index) => {\n  const f = item.json;\n  const emoji = typeEmojis[f.type] || '📌';\n  const typeName = typeNames[f.type] || f.type;\n  \n  // Calcular días de atraso\n  const schedDate = new Date(f.scheduled_date);\n  const todayDate = new Date();\n  const daysLate = Math.floor((todayDate - schedDate) / (1000 * 60 * 60 * 24));\n  const lateText = daysLate > 0 ? ` ⚠️ (${daysLate} días de atraso)` : '';\n  \n  message += `${index + 1}. ${emoji} *${f.clients?.name || 'Cliente'}*${lateText}\\n`;\n  message += `   _${typeName}_\\n`;\n  if (f.notes) message += `   📝 ${f.notes}\\n`;\n  if (f.product_reference) message += `   📦 ${f.product_reference}\\n`;\n  message += `   📱 ${f.clients?.phone || 'Sin teléfono'}\\n\\n`;\n});\n\nmessage += `─────────────────\\n`;\nmessage += `_Total: ${followups.length} seguimiento(s) pendiente(s)_\\n`;\nmessage += `\\n💡 _Abrí Allpol Gestión > Seguimientos para gestionar_`;\n\nreturn [{ json: { message, count: followups.length } }];"
+        },
+        "id": "code-format",
+        "name": "Formatear Mensaje",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          660,
+          -100
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://automatizacion-evolution-api.aq0vtr.easypanel.host/message/sendText/Allpol",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "apikey",
+                "value": "97D1DBC4C9E6-42E7-85E8-8E53D285C69E"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"number\": \"5492216925658@s.whatsapp.net\",\n  \"text\": {{ JSON.stringify($json.message) }}\n}",
+          "options": {}
+        },
+        "id": "http-whatsapp",
+        "name": "Enviar WhatsApp",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          880,
+          -100
+        ]
+      },
+      {
+        "parameters": {},
+        "id": "noop-end",
+        "name": "Sin pendientes",
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          660,
+          100
+        ]
+      }
+    ],
+    "connections": {
+      "Cada día 9AM": {
+        "main": [
+          [
+            {
+              "node": "Get Followups Pendientes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Followups Pendientes": {
+        "main": [
+          [
+            {
+              "node": "¿Hay pendientes?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "¿Hay pendientes?": {
+        "main": [
+          [
+            {
+              "node": "Formatear Mensaje",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Sin pendientes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Formatear Mensaje": {
+        "main": [
+          [
+            {
+              "node": "Enviar WhatsApp",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "America/Argentina/Buenos_Aires",
+      "callerPolicy": "workflowsFromSameOwner",
+      "availableInMCP": false
+    },
+    "active": false,
+    "versionId": "6b82cec0-4717-4e34-bf60-547369e2c64f",
+    "id": "M41AzCPlhql4OhOe",
+    "description": null,
+    "staticData": null,
+    "meta": null,
+    "pinData": null,
+    "activeVersionId": null,
+    "updatedAt": "2025-12-15T16:02:23.053Z",
+    "createdAt": "2025-12-15T16:02:23.053Z",
+    "isArchived": false,
+    "versionCounter": 1,
+    "triggerCount": 0
+  },
+  "message": "Workflow \"Seguimientos Diarios Allpol\" created successfully with ID: M41AzCPlhql4OhOe"
+}
+Starting activation...
+Activating workflow ID: M41AzCPlhql4OhOe...
+Activation result:
+{
+  "success": true,
+  "data": {
+    "updatedAt": "2025-12-15T16:02:23.053Z",
+    "createdAt": "2025-12-15T16:02:23.053Z",
+    "id": "M41AzCPlhql4OhOe",
+    "name": "Seguimientos Diarios Allpol",
+    "description": null,
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 9
+              }
+            ]
+          }
+        },
+        "id": "schedule-trigger",
+        "name": "Cada día 9AM",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "client_followups",
+          "returnAll": true,
+          "filterType": "string",
+          "filterString": "scheduled_date=lte.{{ $now.format('yyyy-MM-dd') }}&status=eq.pending&select=*,clients(name,phone)",
+          "options": {}
+        },
+        "id": "supabase-get",
+        "name": "Get Followups Pendientes",
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          220,
+          0
+        ],
+        "credentials": {
+          "supabaseApi": {
+            "id": "supabase-creds",
+            "name": "Supabase Allpol"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "condition-check",
+                "leftValue": "={{ $input.all().length }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "gt"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "if-hay-pendientes",
+        "name": "¿Hay pendientes?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          440,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const followups = $input.all();\n\nconst today = new Date().toLocaleDateString('es-AR', { \n  weekday: 'long', \n  year: 'numeric', \n  month: 'long', \n  day: 'numeric' \n});\n\nlet message = `📅 *Seguimientos pendientes*\\n${today}\\n\\n`;\n\nconst typeEmojis = {\n  'reminder': '🔔',\n  'grouping': '📦',\n  'material': '🏭'\n};\n\nconst typeNames = {\n  'reminder': 'Recordatorio',\n  'grouping': 'Oportunidad de Agrupación',\n  'material': 'Material Disponible'\n};\n\nfollowups.forEach((item, index) => {\n  const f = item.json;\n  const emoji = typeEmojis[f.type] || '📌';\n  const typeName = typeNames[f.type] || f.type;\n  \n  // Calcular días de atraso\n  const schedDate = new Date(f.scheduled_date);\n  const todayDate = new Date();\n  const daysLate = Math.floor((todayDate - schedDate) / (1000 * 60 * 60 * 24));\n  const lateText = daysLate > 0 ? ` ⚠️ (${daysLate} días de atraso)` : '';\n  \n  message += `${index + 1}. ${emoji} *${f.clients?.name || 'Cliente'}*${lateText}\\n`;\n  message += `   _${typeName}_\\n`;\n  if (f.notes) message += `   📝 ${f.notes}\\n`;\n  if (f.product_reference) message += `   📦 ${f.product_reference}\\n`;\n  message += `   📱 ${f.clients?.phone || 'Sin teléfono'}\\n\\n`;\n});\n\nmessage += `─────────────────\\n`;\nmessage += `_Total: ${followups.length} seguimiento(s) pendiente(s)_\\n`;\nmessage += `\\n💡 _Abrí Allpol Gestión > Seguimientos para gestionar_`;\n\nreturn [{ json: { message, count: followups.length } }];"
+        },
+        "id": "code-format",
+        "name": "Formatear Mensaje",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          660,
+          -100
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://automatizacion-evolution-api.aq0vtr.easypanel.host/message/sendText/Allpol",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "apikey",
+                "value": "97D1DBC4C9E6-42E7-85E8-8E53D285C69E"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"number\": \"5492216925658@s.whatsapp.net\",\n  \"text\": {{ JSON.stringify($json.message) }}\n}",
+          "options": {}
+        },
+        "id": "http-whatsapp",
+        "name": "Enviar WhatsApp",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          880,
+          -100
+        ]
+      },
+      {
+        "parameters": {},
+        "id": "noop-end",
+        "name": "Sin pendientes",
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          660,
+          100
+        ]
+      }
+    ],
+    "connections": {
+      "Cada día 9AM": {
+        "main": [
+          [
+            {
+              "node": "Get Followups Pendientes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Followups Pendientes": {
+        "main": [
+          [
+            {
+              "node": "¿Hay pendientes?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "¿Hay pendientes?": {
+        "main": [
+          [
+            {
+              "node": "Formatear Mensaje",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Sin pendientes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Formatear Mensaje": {
+        "main": [
+          [
+            {
+              "node": "Enviar WhatsApp",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "America/Argentina/Buenos_Aires",
+      "callerPolicy": "workflowsFromSameOwner",
+      "availableInMCP": false
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": null,
+    "versionId": "6b82cec0-4717-4e34-bf60-547369e2c64f",
+    "activeVersionId": "6b82cec0-4717-4e34-bf60-547369e2c64f",
+    "versionCounter": 2,
+    "triggerCount": 0,
+    "activeVersion": {
+      "updatedAt": "2025-12-15T16:02:23.066Z",
+      "createdAt": "2025-12-15T16:02:23.066Z",
+      "versionId": "6b82cec0-4717-4e34-bf60-547369e2c64f",
+      "workflowId": "M41AzCPlhql4OhOe",
+      "nodes": [
+        {
+          "parameters": {
+            "rule": {
+              "interval": [
+                {
+                  "triggerAtHour": 9
+                }
+              ]
+            }
+          },
+          "id": "schedule-trigger",
+          "name": "Cada día 9AM",
+          "type": "n8n-nodes-base.scheduleTrigger",
+          "typeVersion": 1.2,
+          "position": [
+            0,
+            0
+          ]
+        },
+        {
+          "parameters": {
+            "operation": "getAll",
+            "tableId": "client_followups",
+            "returnAll": true,
+            "filterType": "string",
+            "filterString": "scheduled_date=lte.{{ $now.format('yyyy-MM-dd') }}&status=eq.pending&select=*,clients(name,phone)",
+            "options": {}
+          },
+          "id": "supabase-get",
+          "name": "Get Followups Pendientes",
+          "type": "n8n-nodes-base.supabase",
+          "typeVersion": 1,
+          "position": [
+            220,
+            0
+          ],
+          "credentials": {
+            "supabaseApi": {
+              "id": "supabase-creds",
+              "name": "Supabase Allpol"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "conditions": {
+              "options": {
+                "caseSensitive": true,
+                "leftValue": "",
+                "typeValidation": "strict"
+              },
+              "conditions": [
+                {
+                  "id": "condition-check",
+                  "leftValue": "={{ $input.all().length }}",
+                  "rightValue": 0,
+                  "operator": {
+                    "type": "number",
+                    "operation": "gt"
+                  }
+                }
+              ],
+              "combinator": "and"
+            },
+            "options": {}
+          },
+          "id": "if-hay-pendientes",
+          "name": "¿Hay pendientes?",
+          "type": "n8n-nodes-base.if",
+          "typeVersion": 2.2,
+          "position": [
+            440,
+            0
+          ]
+        },
+        {
+          "parameters": {
+            "jsCode": "const followups = $input.all();\n\nconst today = new Date().toLocaleDateString('es-AR', { \n  weekday: 'long', \n  year: 'numeric', \n  month: 'long', \n  day: 'numeric' \n});\n\nlet message = `📅 *Seguimientos pendientes*\\n${today}\\n\\n`;\n\nconst typeEmojis = {\n  'reminder': '🔔',\n  'grouping': '📦',\n  'material': '🏭'\n};\n\nconst typeNames = {\n  'reminder': 'Recordatorio',\n  'grouping': 'Oportunidad de Agrupación',\n  'material': 'Material Disponible'\n};\n\nfollowups.forEach((item, index) => {\n  const f = item.json;\n  const emoji = typeEmojis[f.type] || '📌';\n  const typeName = typeNames[f.type] || f.type;\n  \n  // Calcular días de atraso\n  const schedDate = new Date(f.scheduled_date);\n  const todayDate = new Date();\n  const daysLate = Math.floor((todayDate - schedDate) / (1000 * 60 * 60 * 24));\n  const lateText = daysLate > 0 ? ` ⚠️ (${daysLate} días de atraso)` : '';\n  \n  message += `${index + 1}. ${emoji} *${f.clients?.name || 'Cliente'}*${lateText}\\n`;\n  message += `   _${typeName}_\\n`;\n  if (f.notes) message += `   📝 ${f.notes}\\n`;\n  if (f.product_reference) message += `   📦 ${f.product_reference}\\n`;\n  message += `   📱 ${f.clients?.phone || 'Sin teléfono'}\\n\\n`;\n});\n\nmessage += `─────────────────\\n`;\nmessage += `_Total: ${followups.length} seguimiento(s) pendiente(s)_\\n`;\nmessage += `\\n💡 _Abrí Allpol Gestión > Seguimientos para gestionar_`;\n\nreturn [{ json: { message, count: followups.length } }];"
+          },
+          "id": "code-format",
+          "name": "Formatear Mensaje",
+          "type": "n8n-nodes-base.code",
+          "typeVersion": 2,
+          "position": [
+            660,
+            -100
+          ]
+        },
+        {
+          "parameters": {
+            "method": "POST",
+            "url": "https://automatizacion-evolution-api.aq0vtr.easypanel.host/message/sendText/Allpol",
+            "sendHeaders": true,
+            "headerParameters": {
+              "parameters": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "name": "apikey",
+                  "value": "97D1DBC4C9E6-42E7-85E8-8E53D285C69E"
+                }
+              ]
+            },
+            "sendBody": true,
+            "specifyBody": "json",
+            "jsonBody": "={\n  \"number\": \"5492216925658@s.whatsapp.net\",\n  \"text\": {{ JSON.stringify($json.message) }}\n}",
+            "options": {}
+          },
+          "id": "http-whatsapp",
+          "name": "Enviar WhatsApp",
+          "type": "n8n-nodes-base.httpRequest",
+          "typeVersion": 4.2,
+          "position": [
+            880,
+            -100
+          ]
+        },
+        {
+          "parameters": {},
+          "id": "noop-end",
+          "name": "Sin pendientes",
+          "type": "n8n-nodes-base.noOp",
+          "typeVersion": 1,
+          "position": [
+            660,
+            100
+          ]
+        }
+      ],
+      "connections": {
+        "Cada día 9AM": {
+          "main": [
+            [
+              {
+                "node": "Get Followups Pendientes",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Get Followups Pendientes": {
+          "main": [
+            [
+              {
+                "node": "¿Hay pendientes?",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "¿Hay pendientes?": {
+          "main": [
+            [
+              {
+                "node": "Formatear Mensaje",
+                "type": "main",
+                "index": 0
+              }
+            ],
+            [
+              {
+                "node": "Sin pendientes",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Formatear Mensaje": {
+          "main": [
+            [
+              {
+                "node": "Enviar WhatsApp",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        }
+      },
+      "authors": "malco fernandez",
+      "name": null,
+      "description": null
+    }
+  },
+  "message": "Workflow M41AzCPlhql4OhOe activated successfully"
+}
+✅ Workflow activated successfully!

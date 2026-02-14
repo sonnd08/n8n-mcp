@@ -1,0 +1,4666 @@
+﻿Fetching workflow details...
+{
+  "updatedAt": "2025-12-08T18:55:49.000Z",
+  "createdAt": "2025-06-20T01:04:28.472Z",
+  "id": "3vZyObH9koXfTnp8",
+  "name": "Leads R&R",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "leads",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1904,
+        1376
+      ],
+      "id": "d0908e51-97fa-42bd-85d0-1553a8b1808e",
+      "name": "Webhook",
+      "webhookId": "a3414e97-f942-4938-a579-02cbf2d4bf12"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.referrer }}",
+                    "rightValue": "https://camarasseguridad.net/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "8f3859ea-ae2e-4b73-994a-50b8a7abddf1"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "camaras CR"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5aa0ed40-7430-4dbc-a76b-89dee516d122",
+                    "leftValue": "={{ $('Webhook').item.json.body.referrer }}",
+                    "rightValue": "https://mecanicapesada.top/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Meca pesada"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "933ffc16-ac72-4e54-ad3b-19da3ffeceea",
+                    "leftValue": "={{ $('Webhook').item.json.body.referrer }}",
+                    "rightValue": "https://allpol.com.ar/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Allpol"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4f429151-5941-4228-ad42-ba5e3fa19ebc",
+                    "leftValue": "={{ $('Webhook').item.json.body.referrer }}",
+                    "rightValue": "https://cr-sites.com/bolsas-maceta/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Bolsas Maceta"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9334526e-7727-421d-aa5a-f6d8d3492040",
+                    "leftValue": "={{ $('Webhook').item.json.body.referrer }}",
+                    "rightValue": "https://laplata.camarasseguridad.net/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "C├ímaras LP"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "none"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        144,
+        1024
+      ],
+      "id": "d5955acd-6a28-47f9-8abe-e061836a02f7",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1FdSsi95qgMzvCJ8N10-jloPiTJuCFF5_ZDPwVihQ69I",
+          "mode": "list",
+          "cachedResultName": "Leads Allpol",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FdSsi95qgMzvCJ8N10-jloPiTJuCFF5_ZDPwVihQ69I/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FdSsi95qgMzvCJ8N10-jloPiTJuCFF5_ZDPwVihQ69I/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ingreso": "={{ $json[\"currentDate-ARG\"] }}",
+            "nombre": "={{ $('Webhook').item.json.body.nombre }}",
+            "telefono": "={{ $('Webhook').item.json.body[\"N├║mero de WhatsApp\"] }}",
+            "producto": "={{ $('Webhook').item.json.body.mensaje }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ingreso",
+              "displayName": "ingreso",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "nombre",
+              "displayName": "nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "telefono",
+              "displayName": "telefono",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "producto",
+              "displayName": "producto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        592,
+        1168
+      ],
+      "id": "c5aa7fad-d608-43ce-a702-19b76c3f8525",
+      "name": "Agrega contacos de la web a Leads Allpol",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "XCVUrxXJwWv4s45E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $('Webhook').item.json.body.mensaje }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "lead",
+              "description": "Dinero entrante, solicitudes relacionadas a servicios o productos,cotizacion, instalacion o reparacion. Todo lo que sea un lead para nosotros."
+            },
+            {
+              "category": "otros",
+              "description": "Solicitudes de empleo u ofrecimientos de cv.\nOfrecimiento de servicios o productos por parte de proveedores, personas o empresas que quieran vendernos algo."
+            }
+          ]
+        },
+        "options": {
+          "fallback": "discard"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        -1248,
+        1376
+      ],
+      "id": "945a89e4-3a1d-45f7-8ddf-66db4d7041d8",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        -1248,
+        1584
+      ],
+      "id": "bb3fb79c-e121-4d11-9fb8-293adef89baf",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "l9T4qmBFqTej3Qxo",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "outputFieldName": "currentDate-CR",
+        "options": {
+          "timezone": "America/Costa_Rica"
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        368,
+        784
+      ],
+      "id": "59a3933d-1513-4372-928e-f0531b6c4593",
+      "name": "Costa Rica"
+    },
+    {
+      "parameters": {
+        "outputFieldName": "currentDate-ARG",
+        "options": {
+          "timezone": "America/Buenos_Aires"
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        368,
+        1168
+      ],
+      "id": "50bcf71f-401f-469d-862a-bd291b9b9ec3",
+      "name": "Argentina"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1936,
+        848
+      ],
+      "id": "304e4c03-f547-4db7-96da-607b53215b61",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "d7c31bf0-ee99-4f20-b84a-10ca0bdd1407"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "1"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "137bfc40-aa1b-4d81-a3ab-e80de79b57fc",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "2"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6f2ba0e7-86e2-48f4-9fda-b79e6356e2f1",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "3"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3679acc8-fda4-495d-ab14-c8de55b0a049",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "4"
+            }
+          ]
+        },
+        "options": {
+          "allMatchingOutputs": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1712,
+        816
+      ],
+      "id": "1a3cccd5-c6b1-4b8f-a4c1-0fcd082d32e6",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "operation": "restart-instance",
+        "instanceName": "evolutionapi"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -1488,
+        752
+      ],
+      "id": "077ea19c-7262-4887-b5d5-01df6ca3305b",
+      "name": "Malco CR",
+      "credentials": {
+        "evolutionApi": {
+          "id": "lgR3M6buNvrwBzQ0",
+          "name": "Evolution 50662292932 - Malco CR"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "restart-instance",
+        "instanceName": "Smart CR"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -1488,
+        560
+      ],
+      "id": "9dd76b25-cfcd-49ad-bb58-06b11e3201f4",
+      "name": "Smart CR",
+      "credentials": {
+        "evolutionApi": {
+          "id": "zEeNcZfyeYVosz78",
+          "name": "Smart CR"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "restart-instance",
+        "instanceName": "Allpol"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -1488,
+        944
+      ],
+      "id": "7d844b9f-669c-41c3-8801-0874b345b592",
+      "name": "Allpol",
+      "credentials": {
+        "evolutionApi": {
+          "id": "BcKApPoAEmD2PL5m",
+          "name": "wsp Allpol - 221 6925658"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "outputFieldName": "currentDate-ARG",
+        "options": {
+          "timezone": "America/Buenos_Aires"
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        368,
+        976
+      ],
+      "id": "78608835-bf87-4c16-9eff-0d6fff96a007",
+      "name": "Argentina2"
+    },
+    {
+      "parameters": {
+        "outputFieldName": "currentDate-ARG",
+        "options": {
+          "timezone": "America/Buenos_Aires"
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        368,
+        1360
+      ],
+      "id": "f738fdf7-cf1c-4b36-a3e2-d40e8f2cc40e",
+      "name": "Argentina1"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "Malco ARG",
+        "remoteJid": "5492215548877",
+        "messageText": "=Alejandro buenas, entro un mensaje de la pagina, si no te escribi├│ le podes escribir vos, ac├í te dejo los datos:\n\n{{ $('Webhook').item.json.body.referrer }}\nSolicitud de contacto:\nfecha/hs: {{ $('Webhook').item.json.body.sentDateUTC }}\nnombre: {{ $('Webhook').item.json.body.Nombre }}\ntel: {{ $('Webhook').item.json.body['N├║mero de WhatsApp'] }}\nmensaje: {{ $('Webhook').item.json.body.mensaje }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -2592,
+        2896
+      ],
+      "id": "92684be8-29fe-44f7-8a8c-f91f4315dc40",
+      "name": "Alejandro",
+      "credentials": {
+        "evolutionApi": {
+          "id": "uFLlpp0hjQkOnZnJ",
+          "name": "Evolution 5492216115728 - Malco ARG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "Malco ARG",
+        "remoteJid": "5492213184300",
+        "messageText": "=Mati buenas, entro un mensaje de la pagina, si no te escribi├│ le podes escribir vos, ac├í te dejo los datos:\n\n{{ $('Webhook').item.json.body.referrer }}\nSolicitud de contacto:\nfecha/hs: {{ $('Webhook').item.json.body.sentDateUTC }}\nnombre: {{ $('Webhook').item.json.body.Nombre }}\ntel: {{ $('Webhook').item.json.body['N├║mero de WhatsApp'] }}\nmensaje: {{ $('Webhook').item.json.body.mensaje }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -2592,
+        2448
+      ],
+      "id": "41570900-1c48-46a4-80d7-a30059f58bf8",
+      "name": "Matias",
+      "credentials": {
+        "evolutionApi": {
+          "id": "uFLlpp0hjQkOnZnJ",
+          "name": "Evolution 5492216115728 - Malco ARG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1HU_G0Hy4IX3GuNccFU1Q-P1rUjeOVNd3XKr7e4FGSHk",
+          "mode": "list",
+          "cachedResultName": "Base de Datos - Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1HU_G0Hy4IX3GuNccFU1Q-P1rUjeOVNd3XKr7e4FGSHk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1755573248,
+          "mode": "list",
+          "cachedResultName": "leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1HU_G0Hy4IX3GuNccFU1Q-P1rUjeOVNd3XKr7e4FGSHk/edit#gid=1755573248"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_name",
+              "displayName": "client_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_phone",
+              "displayName": "client_phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_location",
+              "displayName": "client_location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "service_details",
+              "displayName": "service_details",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_source",
+              "displayName": "lead_source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "professional_id",
+              "displayName": "professional_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "price_per_lead",
+              "displayName": "price_per_lead",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "currency_code",
+              "displayName": "currency_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "notified_timestamp",
+              "displayName": "notified_timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "weekly_summary_id",
+              "displayName": "weekly_summary_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        592,
+        784
+      ],
+      "id": "b3bd1eb5-eca4-4d06-ace0-03fccbe6dca1",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "XCVUrxXJwWv4s45E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "edf444ee-1b8d-4cb7-930e-42fabc24d557",
+              "name": "client_name",
+              "value": "={{ $json.body.nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "853fffdc-e7b7-4379-9c54-ed218f8e6850",
+              "name": "client_phone",
+              "value": "={{ $json.body.tel }}",
+              "type": "string"
+            },
+            {
+              "id": "d0170f01-7548-4755-98d1-f70f3948d7a4",
+              "name": "service_details",
+              "value": "={{ $json.body.serv }}",
+              "type": "string"
+            },
+            {
+              "id": "7a69fec7-af59-4e5c-a985-97aea15601e3",
+              "name": "lead_source",
+              "value": "={{ $json.body.referrerArrival }}",
+              "type": "string"
+            },
+            {
+              "id": "97d463d6-b45a-4c35-aee2-bb06cbe202bc",
+              "name": "professional_whatsapp",
+              "value": "={{ $('Webhook').item.json.body.phoneAgent }}",
+              "type": "string"
+            },
+            {
+              "id": "887d5af4-c7e2-4389-aee5-9245499d6ae2",
+              "name": "timestamp",
+              "value": "={{ DateTime.now().setZone('America/Costa_Rica').toFormat('yyyy-MM-dd HH:mm:ss') }}",
+              "type": "string"
+            },
+            {
+              "id": "9162b23f-bdf3-4e3e-b040-d36c2f61cb69",
+              "name": "ubicacion",
+              "value": "={{ $json.body.ubi }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1680,
+        1376
+      ],
+      "id": "1b4c1ea5-ab30-4cec-927b-482d64448191",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9cbab708-bf85-4f1b-a591-b63303f36b0e",
+              "leftValue": "={{ $json.daily_prompt_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -464,
+        1360
+      ],
+      "id": "7ded00a4-a7c3-4f67-8940-d4241b06f609",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1552,
+        2144
+      ],
+      "id": "99b1e00a-f9b8-4562-9e11-48f2c8d65738",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Leads a notificar en concordancia ordinal: {{ $json.client_name }} - {{ $json.client_phone }} - {{ $json.service_details }} - {{ $json.timestamp }}",
+        "options": {
+          "systemMessage": "={{ $('Loop Over Items').item.json.daily_prompt_id }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -656,
+        1904
+      ],
+      "id": "c04e9dc5-d584-4c12-bf43-0a2cac1f829b",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "30ef8bd3-c0e8-41ab-877a-c520f8aa3763",
+              "leftValue": "={{ $json.client_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": "={{ false }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -880,
+        1904
+      ],
+      "id": "b77af841-3214-4f61-a29f-7bac5c5023e5",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "client_name"
+            },
+            {
+              "fieldToAggregate": "client_phone"
+            },
+            {
+              "fieldToAggregate": "service_details"
+            },
+            {
+              "fieldToAggregate": "timestamp"
+            }
+          ]
+        },
+        "options": {
+          "mergeLists": true
+        }
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -1104,
+        1904
+      ],
+      "id": "cdac17f2-d509-42e9-8538-7d78feb0cef3",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 17,
+              "triggerAtMinute": 7
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2000,
+        2240
+      ],
+      "id": "fdaef204-c7c0-4a96-b763-2f4e5f40158d",
+      "name": "Diario"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -80,
+        2160
+      ],
+      "id": "4b034838-2ae8-499c-942e-cc49bb12cf0a",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "evolutionapi",
+        "remoteJid": "50662292932",
+        "messageText": "={{ $json.output }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -2592,
+        2672
+      ],
+      "id": "74c0467c-c5c4-42e9-aa44-a9383239f401",
+      "name": "A mi los descartados1",
+      "credentials": {
+        "evolutionApi": {
+          "id": "lgR3M6buNvrwBzQ0",
+          "name": "Evolution 50662292932 - Malco CR"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "evolutionapi",
+        "remoteJid": "=5492216115728",
+        "messageText": "={{ $json.output }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        1904
+      ],
+      "id": "febf77e0-4a30-4e42-b39f-751438a136cd",
+      "name": "A mi de prueba",
+      "credentials": {
+        "evolutionApi": {
+          "id": "lgR3M6buNvrwBzQ0",
+          "name": "Evolution 50662292932 - Malco CR"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Loop Over Items').item.json.whatsapp_number }}",
+        "contextWindowLength": 7
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -560,
+        2064
+      ],
+      "id": "050f08bf-2b3c-4324-85c6-9e2843e8cda1",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-3-7-sonnet-20250219",
+          "mode": "list",
+          "cachedResultName": "Claude Sonnet 3.7"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        -736,
+        2064
+      ],
+      "id": "2be5222d-c7c9-4d58-a05d-5e3d97cd4d4a",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "KvZF7MNs1iI9NLKB",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "evolutionapi",
+        "remoteJid": "542216115728",
+        "messageText": "Hubo un fallo en la coneccion de N8N con Google",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -1552,
+        2336
+      ],
+      "id": "09a70a8d-0411-4045-9a83-93cda4bb86df",
+      "name": "Enviar texto",
+      "credentials": {
+        "evolutionApi": {
+          "id": "lgR3M6buNvrwBzQ0",
+          "name": "Evolution 50662292932 - Malco CR"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "evolutionapi",
+        "remoteJid": "542216115728",
+        "messageText": "Hubo un fallo en la coneccion de N8N con Google",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        1568
+      ],
+      "id": "38649981-33c0-4099-9a16-fef5982d3613",
+      "name": "Enviar texto1",
+      "credentials": {
+        "evolutionApi": {
+          "id": "lgR3M6buNvrwBzQ0",
+          "name": "Evolution 50662292932 - Malco CR"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appuqvJKOHdjlI6Np",
+          "mode": "list",
+          "cachedResultName": "Profesionales",
+          "cachedResultUrl": "https://airtable.com/appuqvJKOHdjlI6Np"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblowzUNVeV8gYJZq",
+          "mode": "list",
+          "cachedResultName": "hoja1",
+          "cachedResultUrl": "https://airtable.com/appuqvJKOHdjlI6Np/tblowzUNVeV8gYJZq"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -1776,
+        2240
+      ],
+      "id": "a1c5d1a4-70ec-4b40-a29b-2babdda2ac4c",
+      "name": "Lista profesionales",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "2zDfs1ZY0VzfVfyg",
+          "name": "Airtable Personal Access Token account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app8jff881WWUr8Sl",
+          "mode": "list",
+          "cachedResultName": "Base de Datos - Leads",
+          "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblCq162vKS035OZf",
+          "mode": "list",
+          "cachedResultName": "leads",
+          "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl/tblCq162vKS035OZf"
+        },
+        "filterByFormula": "=AND({professional_id} = '{{ $json.whatsapp_number }}', {status} = 'sin-notificar')",
+        "returnAll": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -1296,
+        2160
+      ],
+      "id": "47fd2f1f-4efd-46ce-80d1-7ca822493e88",
+      "name": "Leads sin notificar",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "2zDfs1ZY0VzfVfyg",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "base": {
+          "__rl": true,
+          "value": "app8jff881WWUr8Sl",
+          "mode": "list",
+          "cachedResultName": "Base de Datos - Leads",
+          "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblCq162vKS035OZf",
+          "mode": "list",
+          "cachedResultName": "leads",
+          "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl/tblCq162vKS035OZf"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "client_phone": "={{ $json.client_phone }}",
+            "status": "notificado",
+            "notified_timestamp": "={{new Date().toLocaleDateString()}}"
+          },
+          "matchingColumns": [
+            "client_phone"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "client_name",
+              "displayName": "client_name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "client_phone",
+              "displayName": "client_phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "client_location",
+              "displayName": "client_location",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "service_details",
+              "displayName": "service_details",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "lead_source",
+              "displayName": "lead_source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "De qu├® p├ígina o campa├▒a vino el lead.",
+                  "value": "De qu├® p├ígina o campa├▒a vino el lead."
+                },
+                {
+                  "name": "camarasseguridad.net",
+                  "value": "camarasseguridad.net"
+                },
+                {
+                  "name": "https://services.tochat.be/es/app/whatsapp/1b7894f5-baf9-4fb6-bb30-2fc621360617/edit",
+                  "value": "https://services.tochat.be/es/app/whatsapp/1b7894f5-baf9-4fb6-bb30-2fc621360617/edit"
+                },
+                {
+                  "name": "https://services.tochat.be/es/app/whatsapp/form/whatsapp-form/1b7894f5-baf9-4fb6-bb30-2fc621360617",
+                  "value": "https://services.tochat.be/es/app/whatsapp/form/whatsapp-form/1b7894f5-baf9-4fb6-bb30-2fc621360617"
+                },
+                {
+                  "name": "https://camarasseguridad.net/",
+                  "value": "https://camarasseguridad.net/"
+                },
+                {
+                  "name": "https://laplata.camarasseguridad.net/",
+                  "value": "https://laplata.camarasseguridad.net/"
+                },
+                {
+                  "name": "https://camarasseguridad.net/#servicios",
+                  "value": "https://camarasseguridad.net/#servicios"
+                },
+                {
+                  "name": "FALSE",
+                  "value": "FALSE"
+                },
+                {
+                  "name": "https://camarasseguridad.net/#formulario",
+                  "value": "https://camarasseguridad.net/#formulario"
+                },
+                {
+                  "name": "https://camarasseguridad.net/costa-rica/alajuela/",
+                  "value": "https://camarasseguridad.net/costa-rica/alajuela/"
+                },
+                {
+                  "name": "https://camarasseguridad.net/?utm_source=google&utm_medium=organic&utm_content=main_button&utm_campaign=gmb",
+                  "value": "https://camarasseguridad.net/?utm_source=google&utm_medium=organic&utm_content=main_button&utm_campaign=gmb"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "professional_id",
+              "displayName": "professional_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Identificador ├║nico del profesional asignado.",
+                  "value": "Identificador ├║nico del profesional asignado."
+                },
+                {
+                  "name": "50660742444",
+                  "value": "50660742444"
+                },
+                {
+                  "name": "542215548877",
+                  "value": "542215548877"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "price_per_lead",
+              "displayName": "price_per_lead",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Costo acordado por este lead espec├¡fico.",
+                  "value": "Costo acordado por este lead espec├¡fico."
+                },
+                {
+                  "name": "2000",
+                  "value": "2000"
+                },
+                {
+                  "name": "5000",
+                  "value": "5000"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "currency_code",
+              "displayName": "currency_code",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "C├│digo de la moneda para el cobro.",
+                  "value": "C├│digo de la moneda para el cobro."
+                },
+                {
+                  "name": "CRC (Colones), ARS (Pesos)",
+                  "value": "CRC (Colones), ARS (Pesos)"
+                },
+                {
+                  "name": "CRC",
+                  "value": "CRC"
+                },
+                {
+                  "name": "ARS",
+                  "value": "ARS"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Estado del lead en el flujo de n8n.",
+                  "value": "Estado del lead en el flujo de n8n."
+                },
+                {
+                  "name": "notificado",
+                  "value": "notificado"
+                },
+                {
+                  "name": "sin-notificar",
+                  "value": "sin-notificar"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "notified_timestamp",
+              "displayName": "notified_timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "weekly_summary_id",
+              "displayName": "weekly_summary_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -336,
+        2176
+      ],
+      "id": "1bc8d79c-99be-4852-a1f2-9a903d59649c",
+      "name": "cambia a notificado",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "2zDfs1ZY0VzfVfyg",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app8jff881WWUr8Sl",
+          "mode": "list",
+          "cachedResultName": "Base de Datos - Leads",
+          "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblCq162vKS035OZf",
+          "mode": "list",
+          "cachedResultName": "leads",
+          "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl/tblCq162vKS035OZf"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $('Edit Fields').item.json.timestamp }}",
+            "client_name": "={{ $('Edit Fields').item.json.client_name }}",
+            "client_phone": "={{ $('Edit Fields').item.json.client_phone }}",
+            "client_location": "={{ $('Edit Fields').item.json.ubicacion }}",
+            "service_details": "={{ $('Edit Fields').item.json.service_details }}",
+            "lead_source": "={{ $('Edit Fields').item.json.lead_source }}",
+            "professional_id": "={{ $('Edit Fields').item.json.professional_whatsapp }}",
+            "price_per_lead": "={{ $('Busca profesional').item.json.price_per_lead }}",
+            "status": "=sin-notificar",
+            "currency_code": "={{ $('Busca profesional').item.json.currency_code }}",
+            "notified_timestamp": "={{ $now }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "client_name",
+              "displayName": "client_name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "client_phone",
+              "displayName": "client_phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "client_location",
+              "displayName": "client_location",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "service_details",
+              "displayName": "service_details",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "lead_source",
+              "displayName": "lead_source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "professional_id",
+              "displayName": "professional_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "price_per_lead",
+              "displayName": "price_per_lead",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Costo acordado por este lead espec├¡fico.",
+                  "value": "Costo acordado por este lead espec├¡fico."
+                },
+                {
+                  "name": "2000",
+                  "value": "2000"
+                },
+                {
+                  "name": "5000",
+                  "value": "5000"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "currency_code",
+              "displayName": "currency_code",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "C├│digo de la moneda para el cobro.",
+                  "value": "C├│digo de la moneda para el cobro."
+                },
+                {
+                  "name": "CRC (Colones), ARS (Pesos)",
+                  "value": "CRC (Colones), ARS (Pesos)"
+                },
+                {
+                  "name": "CRC",
+                  "value": "CRC"
+                },
+                {
+                  "name": "ARS",
+                  "value": "ARS"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Estado del lead en el flujo de n8n.",
+                  "value": "Estado del lead en el flujo de n8n."
+                },
+                {
+                  "name": "notificado",
+                  "value": "notificado"
+                },
+                {
+                  "name": "sin-notificar",
+                  "value": "sin-notificar"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "notified_timestamp",
+              "displayName": "notified_timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "weekly_summary_id",
+              "displayName": "weekly_summary_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        1520
+      ],
+      "id": "c7eecea6-4f63-4a17-a02b-fb7680e559f5",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "2zDfs1ZY0VzfVfyg",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appuqvJKOHdjlI6Np",
+          "mode": "list",
+          "cachedResultName": "Profesionales",
+          "cachedResultUrl": "https://airtable.com/appuqvJKOHdjlI6Np"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblowzUNVeV8gYJZq",
+          "mode": "list",
+          "cachedResultName": "hoja1",
+          "cachedResultUrl": "https://airtable.com/appuqvJKOHdjlI6Np/tblowzUNVeV8gYJZq"
+        },
+        "filterByFormula": "=AND({whatsapp_number} = {{$json.professional_whatsapp}}, {activo?} = 'si')",
+        "options": {
+          "fields": [
+            "daily_prompt_id",
+            "price_per_lead",
+            "currency_code"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -896,
+        1360
+      ],
+      "id": "49aa9822-2b8c-4a0c-95b9-b6a23419cf02",
+      "name": "Busca profesional",
+      "alwaysOutputData": false,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "2zDfs1ZY0VzfVfyg",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app8jff881WWUr8Sl",
+          "mode": "list",
+          "cachedResultName": "Base de Datos - Leads",
+          "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblCq162vKS035OZf",
+          "mode": "list",
+          "cachedResultName": "leads",
+          "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl/tblCq162vKS035OZf"
+        },
+        "filterByFormula": "=AND(\n  {client_phone} = '{{ $('Edit Fields').item.json.client_phone }}',\n  OR(\n    IS_SAME(DATETIME_PARSE({timestamp}, 'YYYY-MM-DD HH:mm:ss'), TODAY(), 'day'),\n    IS_SAME(DATETIME_PARSE({timestamp}, 'YYYY-MM-DD HH:mm:ss'), DATEADD(TODAY(), -1, 'days'), 'day')\n  )\n)",
+        "returnAll": false,
+        "limit": 5,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -208,
+        1328
+      ],
+      "id": "9859c7ed-a6c9-4fa6-b3b8-ee783e3d8cfd",
+      "name": "Busca Lead en registros",
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "2zDfs1ZY0VzfVfyg",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ff57a4ac-c416-47e4-b5b0-d79238e55b60",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        16,
+        1408
+      ],
+      "id": "439c1ac1-f456-45de-b7df-15e321cba636",
+      "name": "Es Lead unico?",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "18e9ae0c-d9f0-4b48-813b-654e791d54ec",
+              "leftValue": "={{ $('Webhook').item.json.body.mensaje }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1456,
+        1216
+      ],
+      "id": "ff11c8f7-6952-4148-a38b-c9aa9c61c073",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "evolutionapi",
+        "remoteJid": "={{ $('Edit Fields').item.json.professional_whatsapp }}",
+        "messageText": "=Nuevo cliente recibido {{ $now.setLocale('es-CR').format(\"dd LLL yyyy '- 'HH:mm a\") }}\n\nnombre: {{ $('Edit Fields').item.json.client_name }}\ntel: {{ $('Edit Fields').item.json.client_phone }}\nubicaci├│n: {{ $('Edit Fields').item.json.ubicacion }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        624,
+        1600
+      ],
+      "id": "a4f1d615-9909-4d2a-8922-4709596c4566",
+      "name": "Mensaje a Profesional",
+      "credentials": {
+        "evolutionApi": {
+          "id": "lgR3M6buNvrwBzQ0",
+          "name": "Evolution 50662292932 - Malco CR"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Costa Rica",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Argentina2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Argentina",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "Argentina1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "Busca profesional",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        []
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Costa Rica": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Argentina": {
+      "main": [
+        [
+          {
+            "node": "Agrega contacos de la web a Leads Allpol",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Smart CR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Malco CR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Allpol",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Argentina2": {
+      "main": [
+        []
+      ]
+    },
+    "Argentina1": {
+      "main": [
+        []
+      ]
+    },
+    "Alejandro": {
+      "main": [
+        []
+      ]
+    },
+    "Agrega contacos de la web a Leads Allpol": {
+      "main": [
+        []
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Busca Lead en registros",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Leads sin notificar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "A mi de prueba",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Diario": {
+      "main": [
+        [
+          {
+            "node": "Lista profesionales",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "A mi de prueba": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lista profesionales": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leads sin notificar": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "cambia a notificado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cambia a notificado": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Mensaje a Profesional",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca profesional": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Busca Lead en registros": {
+      "main": [
+        [
+          {
+            "node": "Es Lead unico?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Es Lead unico?": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Busca profesional",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    },
+    "node:Schedule Trigger1": {
+      "recurrenceRules": []
+    },
+    "node:Diario": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Switch": [],
+    "Diario": [
+      {
+        "json": {
+          "timestamp": "2025-11-15T17:07:25.024-05:00",
+          "Readable date": "November 15th 2025, 5:07:25 pm",
+          "Readable time": "5:07:25 pm",
+          "Day of week": "Saturday",
+          "Year": "2025",
+          "Month": "November",
+          "Day of month": "15",
+          "Hour": "17",
+          "Minute": "07",
+          "Second": "25",
+          "Timezone": "America/New_York (UTC-05:00)"
+        }
+      }
+    ],
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2025-11-21T06:00:19.049-05:00",
+          "Readable date": "November 21st 2025, 6:00:19 am",
+          "Readable time": "6:00:19 am",
+          "Day of week": "Friday",
+          "Year": "2025",
+          "Month": "November",
+          "Day of month": "21",
+          "Hour": "06",
+          "Minute": "00",
+          "Second": "19",
+          "Timezone": "America/New_York (UTC-05:00)"
+        }
+      }
+    ]
+  },
+  "versionId": "b59d032a-11de-4923-93e8-768ab1122bfb",
+  "activeVersionId": "b59d032a-11de-4923-93e8-768ab1122bfb",
+  "versionCounter": 22,
+  "triggerCount": 3,
+  "shared": [
+    {
+      "updatedAt": "2025-06-20T01:04:28.477Z",
+      "createdAt": "2025-06-20T01:04:28.477Z",
+      "role": "workflow:owner",
+      "workflowId": "3vZyObH9koXfTnp8",
+      "projectId": "CyuOAJo56zhDqPtw",
+      "project": {
+        "updatedAt": "2025-06-20T00:19:40.019Z",
+        "createdAt": "2025-06-19T22:02:37.058Z",
+        "id": "CyuOAJo56zhDqPtw",
+        "name": "malco fernandez <malcofernandez@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "updatedAt": "2025-06-19T22:02:37.058Z",
+            "createdAt": "2025-06-19T22:02:37.058Z",
+            "userId": "f69c1801-dfb0-4d19-b972-317a699ae6ec",
+            "projectId": "CyuOAJo56zhDqPtw",
+            "user": {
+              "updatedAt": "2025-12-11T12:08:23.000Z",
+              "createdAt": "2025-06-19T22:02:36.720Z",
+              "id": "f69c1801-dfb0-4d19-b972-317a699ae6ec",
+              "email": "malcofernandez@gmail.com",
+              "firstName": "malco",
+              "lastName": "fernandez",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-06-20T00:19:48.291Z",
+                "personalization_survey_n8n_version": "1.98.2",
+                "companyType": "saas"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "3vZyObH9koXfTnp8",
+                "userActivatedAt": 1750524045766,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1753208867750
+                },
+                "easyAIWorkflowOnboarded": true,
+                "dismissedCallouts": {
+                  "aiAgentStarterCallout": true
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-12-11",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": {
+    "updatedAt": "2025-12-08T18:55:49.326Z",
+    "createdAt": "2025-12-08T18:55:49.326Z",
+    "versionId": "b59d032a-11de-4923-93e8-768ab1122bfb",
+    "workflowId": "3vZyObH9koXfTnp8",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "leads",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -1904,
+          1376
+        ],
+        "id": "d0908e51-97fa-42bd-85d0-1553a8b1808e",
+        "name": "Webhook",
+        "webhookId": "a3414e97-f942-4938-a579-02cbf2d4bf12"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $('Webhook').item.json.body.referrer }}",
+                      "rightValue": "https://camarasseguridad.net/",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "id": "8f3859ea-ae2e-4b73-994a-50b8a7abddf1"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "camaras CR"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "5aa0ed40-7430-4dbc-a76b-89dee516d122",
+                      "leftValue": "={{ $('Webhook').item.json.body.referrer }}",
+                      "rightValue": "https://mecanicapesada.top/",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Meca pesada"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "933ffc16-ac72-4e54-ad3b-19da3ffeceea",
+                      "leftValue": "={{ $('Webhook').item.json.body.referrer }}",
+                      "rightValue": "https://allpol.com.ar/",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Allpol"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "4f429151-5941-4228-ad42-ba5e3fa19ebc",
+                      "leftValue": "={{ $('Webhook').item.json.body.referrer }}",
+                      "rightValue": "https://cr-sites.com/bolsas-maceta/",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Bolsas Maceta"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "9334526e-7727-421d-aa5a-f6d8d3492040",
+                      "leftValue": "={{ $('Webhook').item.json.body.referrer }}",
+                      "rightValue": "https://laplata.camarasseguridad.net/",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "C├ímaras LP"
+              }
+            ]
+          },
+          "options": {
+            "fallbackOutput": "none"
+          }
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          144,
+          1024
+        ],
+        "id": "d5955acd-6a28-47f9-8abe-e061836a02f7",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1FdSsi95qgMzvCJ8N10-jloPiTJuCFF5_ZDPwVihQ69I",
+            "mode": "list",
+            "cachedResultName": "Leads Allpol",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FdSsi95qgMzvCJ8N10-jloPiTJuCFF5_ZDPwVihQ69I/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Hoja 1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FdSsi95qgMzvCJ8N10-jloPiTJuCFF5_ZDPwVihQ69I/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "ingreso": "={{ $json[\"currentDate-ARG\"] }}",
+              "nombre": "={{ $('Webhook').item.json.body.nombre }}",
+              "telefono": "={{ $('Webhook').item.json.body[\"N├║mero de WhatsApp\"] }}",
+              "producto": "={{ $('Webhook').item.json.body.mensaje }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "ingreso",
+                "displayName": "ingreso",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "nombre",
+                "displayName": "nombre",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "telefono",
+                "displayName": "telefono",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "producto",
+                "displayName": "producto",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.6,
+        "position": [
+          592,
+          1168
+        ],
+        "id": "c5aa7fad-d608-43ce-a702-19b76c3f8525",
+        "name": "Agrega contacos de la web a Leads Allpol",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "XCVUrxXJwWv4s45E",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "inputText": "={{ $('Webhook').item.json.body.mensaje }}",
+          "categories": {
+            "categories": [
+              {
+                "category": "lead",
+                "description": "Dinero entrante, solicitudes relacionadas a servicios o productos,cotizacion, instalacion o reparacion. Todo lo que sea un lead para nosotros."
+              },
+              {
+                "category": "otros",
+                "description": "Solicitudes de empleo u ofrecimientos de cv.\nOfrecimiento de servicios o productos por parte de proveedores, personas o empresas que quieran vendernos algo."
+              }
+            ]
+          },
+          "options": {
+            "fallback": "discard"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.textClassifier",
+        "typeVersion": 1.1,
+        "position": [
+          -1248,
+          1376
+        ],
+        "id": "945a89e4-3a1d-45f7-8ddf-66db4d7041d8",
+        "name": "Text Classifier"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+        "typeVersion": 1,
+        "position": [
+          -1248,
+          1584
+        ],
+        "id": "bb3fb79c-e121-4d11-9fb8-293adef89baf",
+        "name": "DeepSeek Chat Model",
+        "credentials": {
+          "deepSeekApi": {
+            "id": "l9T4qmBFqTej3Qxo",
+            "name": "DeepSeek account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "outputFieldName": "currentDate-CR",
+          "options": {
+            "timezone": "America/Costa_Rica"
+          }
+        },
+        "type": "n8n-nodes-base.dateTime",
+        "typeVersion": 2,
+        "position": [
+          368,
+          784
+        ],
+        "id": "59a3933d-1513-4372-928e-f0531b6c4593",
+        "name": "Costa Rica"
+      },
+      {
+        "parameters": {
+          "outputFieldName": "currentDate-ARG",
+          "options": {
+            "timezone": "America/Buenos_Aires"
+          }
+        },
+        "type": "n8n-nodes-base.dateTime",
+        "typeVersion": 2,
+        "position": [
+          368,
+          1168
+        ],
+        "id": "50bcf71f-401f-469d-862a-bd291b9b9ec3",
+        "name": "Argentina"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 6
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -1936,
+          848
+        ],
+        "id": "304e4c03-f547-4db7-96da-607b53215b61",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "d7c31bf0-ee99-4f20-b84a-10ca0bdd1407"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "1"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "137bfc40-aa1b-4d81-a3ab-e80de79b57fc",
+                      "leftValue": "",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "2"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "6f2ba0e7-86e2-48f4-9fda-b79e6356e2f1",
+                      "leftValue": "",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "3"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "3679acc8-fda4-495d-ab14-c8de55b0a049",
+                      "leftValue": "",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "4"
+              }
+            ]
+          },
+          "options": {
+            "allMatchingOutputs": true
+          }
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          -1712,
+          816
+        ],
+        "id": "1a3cccd5-c6b1-4b8f-a4c1-0fcd082d32e6",
+        "name": "Switch1"
+      },
+      {
+        "parameters": {
+          "operation": "restart-instance",
+          "instanceName": "evolutionapi"
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          -1488,
+          752
+        ],
+        "id": "077ea19c-7262-4887-b5d5-01df6ca3305b",
+        "name": "Malco CR",
+        "credentials": {
+          "evolutionApi": {
+            "id": "lgR3M6buNvrwBzQ0",
+            "name": "Evolution 50662292932 - Malco CR"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "restart-instance",
+          "instanceName": "Smart CR"
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          -1488,
+          560
+        ],
+        "id": "9dd76b25-cfcd-49ad-bb58-06b11e3201f4",
+        "name": "Smart CR",
+        "credentials": {
+          "evolutionApi": {
+            "id": "zEeNcZfyeYVosz78",
+            "name": "Smart CR"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "restart-instance",
+          "instanceName": "Allpol"
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          -1488,
+          944
+        ],
+        "id": "7d844b9f-669c-41c3-8801-0874b345b592",
+        "name": "Allpol",
+        "credentials": {
+          "evolutionApi": {
+            "id": "BcKApPoAEmD2PL5m",
+            "name": "wsp Allpol - 221 6925658"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "outputFieldName": "currentDate-ARG",
+          "options": {
+            "timezone": "America/Buenos_Aires"
+          }
+        },
+        "type": "n8n-nodes-base.dateTime",
+        "typeVersion": 2,
+        "position": [
+          368,
+          976
+        ],
+        "id": "78608835-bf87-4c16-9eff-0d6fff96a007",
+        "name": "Argentina2"
+      },
+      {
+        "parameters": {
+          "outputFieldName": "currentDate-ARG",
+          "options": {
+            "timezone": "America/Buenos_Aires"
+          }
+        },
+        "type": "n8n-nodes-base.dateTime",
+        "typeVersion": 2,
+        "position": [
+          368,
+          1360
+        ],
+        "id": "f738fdf7-cf1c-4b36-a3e2-d40e8f2cc40e",
+        "name": "Argentina1"
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "Malco ARG",
+          "remoteJid": "5492215548877",
+          "messageText": "=Alejandro buenas, entro un mensaje de la pagina, si no te escribi├│ le podes escribir vos, ac├í te dejo los datos:\n\n{{ $('Webhook').item.json.body.referrer }}\nSolicitud de contacto:\nfecha/hs: {{ $('Webhook').item.json.body.sentDateUTC }}\nnombre: {{ $('Webhook').item.json.body.Nombre }}\ntel: {{ $('Webhook').item.json.body['N├║mero de WhatsApp'] }}\nmensaje: {{ $('Webhook').item.json.body.mensaje }}",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          -2592,
+          2896
+        ],
+        "id": "92684be8-29fe-44f7-8a8c-f91f4315dc40",
+        "name": "Alejandro",
+        "credentials": {
+          "evolutionApi": {
+            "id": "uFLlpp0hjQkOnZnJ",
+            "name": "Evolution 5492216115728 - Malco ARG"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "Malco ARG",
+          "remoteJid": "5492213184300",
+          "messageText": "=Mati buenas, entro un mensaje de la pagina, si no te escribi├│ le podes escribir vos, ac├í te dejo los datos:\n\n{{ $('Webhook').item.json.body.referrer }}\nSolicitud de contacto:\nfecha/hs: {{ $('Webhook').item.json.body.sentDateUTC }}\nnombre: {{ $('Webhook').item.json.body.Nombre }}\ntel: {{ $('Webhook').item.json.body['N├║mero de WhatsApp'] }}\nmensaje: {{ $('Webhook').item.json.body.mensaje }}",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          -2592,
+          2448
+        ],
+        "id": "41570900-1c48-46a4-80d7-a30059f58bf8",
+        "name": "Matias",
+        "credentials": {
+          "evolutionApi": {
+            "id": "uFLlpp0hjQkOnZnJ",
+            "name": "Evolution 5492216115728 - Malco ARG"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1HU_G0Hy4IX3GuNccFU1Q-P1rUjeOVNd3XKr7e4FGSHk",
+            "mode": "list",
+            "cachedResultName": "Base de Datos - Leads",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1HU_G0Hy4IX3GuNccFU1Q-P1rUjeOVNd3XKr7e4FGSHk/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 1755573248,
+            "mode": "list",
+            "cachedResultName": "leads",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1HU_G0Hy4IX3GuNccFU1Q-P1rUjeOVNd3XKr7e4FGSHk/edit#gid=1755573248"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "timestamp",
+                "displayName": "timestamp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "lead_id",
+                "displayName": "lead_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "client_name",
+                "displayName": "client_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "client_phone",
+                "displayName": "client_phone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "client_location",
+                "displayName": "client_location",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "service_details",
+                "displayName": "service_details",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "lead_source",
+                "displayName": "lead_source",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "professional_id",
+                "displayName": "professional_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "price_per_lead",
+                "displayName": "price_per_lead",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "currency_code",
+                "displayName": "currency_code",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "notified_timestamp",
+                "displayName": "notified_timestamp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "weekly_summary_id",
+                "displayName": "weekly_summary_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.6,
+        "position": [
+          592,
+          784
+        ],
+        "id": "b3bd1eb5-eca4-4d06-ace0-03fccbe6dca1",
+        "name": "Append row in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "XCVUrxXJwWv4s45E",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "edf444ee-1b8d-4cb7-930e-42fabc24d557",
+                "name": "client_name",
+                "value": "={{ $json.body.nombre }}",
+                "type": "string"
+              },
+              {
+                "id": "853fffdc-e7b7-4379-9c54-ed218f8e6850",
+                "name": "client_phone",
+                "value": "={{ $json.body.tel }}",
+                "type": "string"
+              },
+              {
+                "id": "d0170f01-7548-4755-98d1-f70f3948d7a4",
+                "name": "service_details",
+                "value": "={{ $json.body.serv }}",
+                "type": "string"
+              },
+              {
+                "id": "7a69fec7-af59-4e5c-a985-97aea15601e3",
+                "name": "lead_source",
+                "value": "={{ $json.body.referrerArrival }}",
+                "type": "string"
+              },
+              {
+                "id": "97d463d6-b45a-4c35-aee2-bb06cbe202bc",
+                "name": "professional_whatsapp",
+                "value": "={{ $('Webhook').item.json.body.phoneAgent }}",
+                "type": "string"
+              },
+              {
+                "id": "887d5af4-c7e2-4389-aee5-9245499d6ae2",
+                "name": "timestamp",
+                "value": "={{ DateTime.now().setZone('America/Costa_Rica').toFormat('yyyy-MM-dd HH:mm:ss') }}",
+                "type": "string"
+              },
+              {
+                "id": "9162b23f-bdf3-4e3e-b040-d36c2f61cb69",
+                "name": "ubicacion",
+                "value": "={{ $json.body.ubi }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -1680,
+          1376
+        ],
+        "id": "1b4c1ea5-ab30-4cec-927b-482d64448191",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "9cbab708-bf85-4f1b-a591-b63303f36b0e",
+                "leftValue": "={{ $json.daily_prompt_id }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -464,
+          1360
+        ],
+        "id": "7ded00a4-a7c3-4f67-8940-d4241b06f609",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -1552,
+          2144
+        ],
+        "id": "99b1e00a-f9b8-4562-9e11-48f2c8d65738",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Leads a notificar en concordancia ordinal: {{ $json.client_name }} - {{ $json.client_phone }} - {{ $json.service_details }} - {{ $json.timestamp }}",
+          "options": {
+            "systemMessage": "={{ $('Loop Over Items').item.json.daily_prompt_id }}"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2.2,
+        "position": [
+          -656,
+          1904
+        ],
+        "id": "c04e9dc5-d584-4c12-bf43-0a2cac1f829b",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "30ef8bd3-c0e8-41ab-877a-c520f8aa3763",
+                "leftValue": "={{ $json.client_name }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "array",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": "={{ false }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -880,
+          1904
+        ],
+        "id": "b77af841-3214-4f61-a29f-7bac5c5023e5",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "fieldsToAggregate": {
+            "fieldToAggregate": [
+              {
+                "fieldToAggregate": "client_name"
+              },
+              {
+                "fieldToAggregate": "client_phone"
+              },
+              {
+                "fieldToAggregate": "service_details"
+              },
+              {
+                "fieldToAggregate": "timestamp"
+              }
+            ]
+          },
+          "options": {
+            "mergeLists": true
+          }
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          -1104,
+          1904
+        ],
+        "id": "cdac17f2-d509-42e9-8538-7d78feb0cef3",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 17,
+                "triggerAtMinute": 7
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -2000,
+          2240
+        ],
+        "id": "fdaef204-c7c0-4a96-b763-2f4e5f40158d",
+        "name": "Diario"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -80,
+          2160
+        ],
+        "id": "4b034838-2ae8-499c-942e-cc49bb12cf0a",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "evolutionapi",
+          "remoteJid": "50662292932",
+          "messageText": "={{ $json.output }}",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          -2592,
+          2672
+        ],
+        "id": "74c0467c-c5c4-42e9-aa44-a9383239f401",
+        "name": "A mi los descartados1",
+        "credentials": {
+          "evolutionApi": {
+            "id": "lgR3M6buNvrwBzQ0",
+            "name": "Evolution 50662292932 - Malco CR"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "evolutionapi",
+          "remoteJid": "=5492216115728",
+          "messageText": "={{ $json.output }}",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          -304,
+          1904
+        ],
+        "id": "febf77e0-4a30-4e42-b39f-751438a136cd",
+        "name": "A mi de prueba",
+        "credentials": {
+          "evolutionApi": {
+            "id": "lgR3M6buNvrwBzQ0",
+            "name": "Evolution 50662292932 - Malco CR"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $('Loop Over Items').item.json.whatsapp_number }}",
+          "contextWindowLength": 7
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          -560,
+          2064
+        ],
+        "id": "050f08bf-2b3c-4324-85c6-9e2843e8cda1",
+        "name": "Simple Memory"
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "claude-3-7-sonnet-20250219",
+            "mode": "list",
+            "cachedResultName": "Claude Sonnet 3.7"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+        "typeVersion": 1.3,
+        "position": [
+          -736,
+          2064
+        ],
+        "id": "2be5222d-c7c9-4d58-a05d-5e3d97cd4d4a",
+        "name": "Anthropic Chat Model",
+        "credentials": {
+          "anthropicApi": {
+            "id": "KvZF7MNs1iI9NLKB",
+            "name": "Anthropic account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "evolutionapi",
+          "remoteJid": "542216115728",
+          "messageText": "Hubo un fallo en la coneccion de N8N con Google",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          -1552,
+          2336
+        ],
+        "id": "09a70a8d-0411-4045-9a83-93cda4bb86df",
+        "name": "Enviar texto",
+        "credentials": {
+          "evolutionApi": {
+            "id": "lgR3M6buNvrwBzQ0",
+            "name": "Evolution 50662292932 - Malco CR"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "evolutionapi",
+          "remoteJid": "542216115728",
+          "messageText": "Hubo un fallo en la coneccion de N8N con Google",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          -592,
+          1568
+        ],
+        "id": "38649981-33c0-4099-9a16-fef5982d3613",
+        "name": "Enviar texto1",
+        "credentials": {
+          "evolutionApi": {
+            "id": "lgR3M6buNvrwBzQ0",
+            "name": "Evolution 50662292932 - Malco CR"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "search",
+          "base": {
+            "__rl": true,
+            "value": "appuqvJKOHdjlI6Np",
+            "mode": "list",
+            "cachedResultName": "Profesionales",
+            "cachedResultUrl": "https://airtable.com/appuqvJKOHdjlI6Np"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tblowzUNVeV8gYJZq",
+            "mode": "list",
+            "cachedResultName": "hoja1",
+            "cachedResultUrl": "https://airtable.com/appuqvJKOHdjlI6Np/tblowzUNVeV8gYJZq"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.airtable",
+        "typeVersion": 2.1,
+        "position": [
+          -1776,
+          2240
+        ],
+        "id": "a1c5d1a4-70ec-4b40-a29b-2babdda2ac4c",
+        "name": "Lista profesionales",
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "2zDfs1ZY0VzfVfyg",
+            "name": "Airtable Personal Access Token account"
+          }
+        },
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "operation": "search",
+          "base": {
+            "__rl": true,
+            "value": "app8jff881WWUr8Sl",
+            "mode": "list",
+            "cachedResultName": "Base de Datos - Leads",
+            "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tblCq162vKS035OZf",
+            "mode": "list",
+            "cachedResultName": "leads",
+            "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl/tblCq162vKS035OZf"
+          },
+          "filterByFormula": "=AND({professional_id} = '{{ $json.whatsapp_number }}', {status} = 'sin-notificar')",
+          "returnAll": false,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.airtable",
+        "typeVersion": 2.1,
+        "position": [
+          -1296,
+          2160
+        ],
+        "id": "47fd2f1f-4efd-46ce-80d1-7ca822493e88",
+        "name": "Leads sin notificar",
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "2zDfs1ZY0VzfVfyg",
+            "name": "Airtable Personal Access Token account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "base": {
+            "__rl": true,
+            "value": "app8jff881WWUr8Sl",
+            "mode": "list",
+            "cachedResultName": "Base de Datos - Leads",
+            "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tblCq162vKS035OZf",
+            "mode": "list",
+            "cachedResultName": "leads",
+            "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl/tblCq162vKS035OZf"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "client_phone": "={{ $json.client_phone }}",
+              "status": "notificado",
+              "notified_timestamp": "={{new Date().toLocaleDateString()}}"
+            },
+            "matchingColumns": [
+              "client_phone"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": true,
+                "removed": false
+              },
+              {
+                "id": "timestamp",
+                "displayName": "timestamp",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "client_name",
+                "displayName": "client_name",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "client_phone",
+                "displayName": "client_phone",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "client_location",
+                "displayName": "client_location",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "service_details",
+                "displayName": "service_details",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "lead_source",
+                "displayName": "lead_source",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "options",
+                "options": [
+                  {
+                    "name": "De qu├® p├ígina o campa├▒a vino el lead.",
+                    "value": "De qu├® p├ígina o campa├▒a vino el lead."
+                  },
+                  {
+                    "name": "camarasseguridad.net",
+                    "value": "camarasseguridad.net"
+                  },
+                  {
+                    "name": "https://services.tochat.be/es/app/whatsapp/1b7894f5-baf9-4fb6-bb30-2fc621360617/edit",
+                    "value": "https://services.tochat.be/es/app/whatsapp/1b7894f5-baf9-4fb6-bb30-2fc621360617/edit"
+                  },
+                  {
+                    "name": "https://services.tochat.be/es/app/whatsapp/form/whatsapp-form/1b7894f5-baf9-4fb6-bb30-2fc621360617",
+                    "value": "https://services.tochat.be/es/app/whatsapp/form/whatsapp-form/1b7894f5-baf9-4fb6-bb30-2fc621360617"
+                  },
+                  {
+                    "name": "https://camarasseguridad.net/",
+                    "value": "https://camarasseguridad.net/"
+                  },
+                  {
+                    "name": "https://laplata.camarasseguridad.net/",
+                    "value": "https://laplata.camarasseguridad.net/"
+                  },
+                  {
+                    "name": "https://camarasseguridad.net/#servicios",
+                    "value": "https://camarasseguridad.net/#servicios"
+                  },
+                  {
+                    "name": "FALSE",
+                    "value": "FALSE"
+                  },
+                  {
+                    "name": "https://camarasseguridad.net/#formulario",
+                    "value": "https://camarasseguridad.net/#formulario"
+                  },
+                  {
+                    "name": "https://camarasseguridad.net/costa-rica/alajuela/",
+                    "value": "https://camarasseguridad.net/costa-rica/alajuela/"
+                  },
+                  {
+                    "name": "https://camarasseguridad.net/?utm_source=google&utm_medium=organic&utm_content=main_button&utm_campaign=gmb",
+                    "value": "https://camarasseguridad.net/?utm_source=google&utm_medium=organic&utm_content=main_button&utm_campaign=gmb"
+                  }
+                ],
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "professional_id",
+                "displayName": "professional_id",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "options",
+                "options": [
+                  {
+                    "name": "Identificador ├║nico del profesional asignado.",
+                    "value": "Identificador ├║nico del profesional asignado."
+                  },
+                  {
+                    "name": "50660742444",
+                    "value": "50660742444"
+                  },
+                  {
+                    "name": "542215548877",
+                    "value": "542215548877"
+                  }
+                ],
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "price_per_lead",
+                "displayName": "price_per_lead",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "options",
+                "options": [
+                  {
+                    "name": "Costo acordado por este lead espec├¡fico.",
+                    "value": "Costo acordado por este lead espec├¡fico."
+                  },
+                  {
+                    "name": "2000",
+                    "value": "2000"
+                  },
+                  {
+                    "name": "5000",
+                    "value": "5000"
+                  }
+                ],
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "currency_code",
+                "displayName": "currency_code",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "options",
+                "options": [
+                  {
+                    "name": "C├│digo de la moneda para el cobro.",
+                    "value": "C├│digo de la moneda para el cobro."
+                  },
+                  {
+                    "name": "CRC (Colones), ARS (Pesos)",
+                    "value": "CRC (Colones), ARS (Pesos)"
+                  },
+                  {
+                    "name": "CRC",
+                    "value": "CRC"
+                  },
+                  {
+                    "name": "ARS",
+                    "value": "ARS"
+                  }
+                ],
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "options",
+                "options": [
+                  {
+                    "name": "Estado del lead en el flujo de n8n.",
+                    "value": "Estado del lead en el flujo de n8n."
+                  },
+                  {
+                    "name": "notificado",
+                    "value": "notificado"
+                  },
+                  {
+                    "name": "sin-notificar",
+                    "value": "sin-notificar"
+                  }
+                ],
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "notified_timestamp",
+                "displayName": "notified_timestamp",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "weekly_summary_id",
+                "displayName": "weekly_summary_id",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.airtable",
+        "typeVersion": 2.1,
+        "position": [
+          -336,
+          2176
+        ],
+        "id": "1bc8d79c-99be-4852-a1f2-9a903d59649c",
+        "name": "cambia a notificado",
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "2zDfs1ZY0VzfVfyg",
+            "name": "Airtable Personal Access Token account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "create",
+          "base": {
+            "__rl": true,
+            "value": "app8jff881WWUr8Sl",
+            "mode": "list",
+            "cachedResultName": "Base de Datos - Leads",
+            "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tblCq162vKS035OZf",
+            "mode": "list",
+            "cachedResultName": "leads",
+            "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl/tblCq162vKS035OZf"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "timestamp": "={{ $('Edit Fields').item.json.timestamp }}",
+              "client_name": "={{ $('Edit Fields').item.json.client_name }}",
+              "client_phone": "={{ $('Edit Fields').item.json.client_phone }}",
+              "client_location": "={{ $('Edit Fields').item.json.ubicacion }}",
+              "service_details": "={{ $('Edit Fields').item.json.service_details }}",
+              "lead_source": "={{ $('Edit Fields').item.json.lead_source }}",
+              "professional_id": "={{ $('Edit Fields').item.json.professional_whatsapp }}",
+              "price_per_lead": "={{ $('Busca profesional').item.json.price_per_lead }}",
+              "status": "=sin-notificar",
+              "currency_code": "={{ $('Busca profesional').item.json.currency_code }}",
+              "notified_timestamp": "={{ $now }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "timestamp",
+                "displayName": "timestamp",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "client_name",
+                "displayName": "client_name",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "client_phone",
+                "displayName": "client_phone",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "client_location",
+                "displayName": "client_location",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "service_details",
+                "displayName": "service_details",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "lead_source",
+                "displayName": "lead_source",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "professional_id",
+                "displayName": "professional_id",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "price_per_lead",
+                "displayName": "price_per_lead",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "options",
+                "options": [
+                  {
+                    "name": "Costo acordado por este lead espec├¡fico.",
+                    "value": "Costo acordado por este lead espec├¡fico."
+                  },
+                  {
+                    "name": "2000",
+                    "value": "2000"
+                  },
+                  {
+                    "name": "5000",
+                    "value": "5000"
+                  }
+                ],
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "currency_code",
+                "displayName": "currency_code",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "options",
+                "options": [
+                  {
+                    "name": "C├│digo de la moneda para el cobro.",
+                    "value": "C├│digo de la moneda para el cobro."
+                  },
+                  {
+                    "name": "CRC (Colones), ARS (Pesos)",
+                    "value": "CRC (Colones), ARS (Pesos)"
+                  },
+                  {
+                    "name": "CRC",
+                    "value": "CRC"
+                  },
+                  {
+                    "name": "ARS",
+                    "value": "ARS"
+                  }
+                ],
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "options",
+                "options": [
+                  {
+                    "name": "Estado del lead en el flujo de n8n.",
+                    "value": "Estado del lead en el flujo de n8n."
+                  },
+                  {
+                    "name": "notificado",
+                    "value": "notificado"
+                  },
+                  {
+                    "name": "sin-notificar",
+                    "value": "sin-notificar"
+                  }
+                ],
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "notified_timestamp",
+                "displayName": "notified_timestamp",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "weekly_summary_id",
+                "displayName": "weekly_summary_id",
+                "required": false,
+                "defaultMatch": false,
+                "canBeUsedToMatch": true,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.airtable",
+        "typeVersion": 2.1,
+        "position": [
+          256,
+          1520
+        ],
+        "id": "c7eecea6-4f63-4a17-a02b-fb7680e559f5",
+        "name": "Create a record",
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "2zDfs1ZY0VzfVfyg",
+            "name": "Airtable Personal Access Token account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "search",
+          "base": {
+            "__rl": true,
+            "value": "appuqvJKOHdjlI6Np",
+            "mode": "list",
+            "cachedResultName": "Profesionales",
+            "cachedResultUrl": "https://airtable.com/appuqvJKOHdjlI6Np"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tblowzUNVeV8gYJZq",
+            "mode": "list",
+            "cachedResultName": "hoja1",
+            "cachedResultUrl": "https://airtable.com/appuqvJKOHdjlI6Np/tblowzUNVeV8gYJZq"
+          },
+          "filterByFormula": "=AND({whatsapp_number} = {{$json.professional_whatsapp}}, {activo?} = 'si')",
+          "options": {
+            "fields": [
+              "daily_prompt_id",
+              "price_per_lead",
+              "currency_code"
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.airtable",
+        "typeVersion": 2.1,
+        "position": [
+          -896,
+          1360
+        ],
+        "id": "49aa9822-2b8c-4a0c-95b9-b6a23419cf02",
+        "name": "Busca profesional",
+        "alwaysOutputData": false,
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "2zDfs1ZY0VzfVfyg",
+            "name": "Airtable Personal Access Token account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "search",
+          "base": {
+            "__rl": true,
+            "value": "app8jff881WWUr8Sl",
+            "mode": "list",
+            "cachedResultName": "Base de Datos - Leads",
+            "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tblCq162vKS035OZf",
+            "mode": "list",
+            "cachedResultName": "leads",
+            "cachedResultUrl": "https://airtable.com/app8jff881WWUr8Sl/tblCq162vKS035OZf"
+          },
+          "filterByFormula": "=AND(\n  {client_phone} = '{{ $('Edit Fields').item.json.client_phone }}',\n  OR(\n    IS_SAME(DATETIME_PARSE({timestamp}, 'YYYY-MM-DD HH:mm:ss'), TODAY(), 'day'),\n    IS_SAME(DATETIME_PARSE({timestamp}, 'YYYY-MM-DD HH:mm:ss'), DATEADD(TODAY(), -1, 'days'), 'day')\n  )\n)",
+          "returnAll": false,
+          "limit": 5,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.airtable",
+        "typeVersion": 2.1,
+        "position": [
+          -208,
+          1328
+        ],
+        "id": "9859c7ed-a6c9-4fa6-b3b8-ee783e3d8cfd",
+        "name": "Busca Lead en registros",
+        "alwaysOutputData": true,
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "2zDfs1ZY0VzfVfyg",
+            "name": "Airtable Personal Access Token account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "ff57a4ac-c416-47e4-b5b0-d79238e55b60",
+                "leftValue": "={{ $json.id }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "empty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          16,
+          1408
+        ],
+        "id": "439c1ac1-f456-45de-b7df-15e321cba636",
+        "name": "Es Lead unico?",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "18e9ae0c-d9f0-4b48-813b-654e791d54ec",
+                "leftValue": "={{ $('Webhook').item.json.body.mensaje }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notExists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -1456,
+          1216
+        ],
+        "id": "ff11c8f7-6952-4148-a38b-c9aa9c61c073",
+        "name": "If2"
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "evolutionapi",
+          "remoteJid": "={{ $('Edit Fields').item.json.professional_whatsapp }}",
+          "messageText": "=Nuevo cliente recibido {{ $now.setLocale('es-CR').format(\"dd LLL yyyy '- 'HH:mm a\") }}\n\nnombre: {{ $('Edit Fields').item.json.client_name }}\ntel: {{ $('Edit Fields').item.json.client_phone }}\nubicaci├│n: {{ $('Edit Fields').item.json.ubicacion }}",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          624,
+          1600
+        ],
+        "id": "a4f1d615-9909-4d2a-8922-4709596c4566",
+        "name": "Mensaje a Profesional",
+        "credentials": {
+          "evolutionApi": {
+            "id": "lgR3M6buNvrwBzQ0",
+            "name": "Evolution 50662292932 - Malco CR"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Costa Rica",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Argentina2",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Argentina",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [],
+          [
+            {
+              "node": "Argentina1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Text Classifier": {
+        "main": [
+          [
+            {
+              "node": "Busca profesional",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [],
+          []
+        ]
+      },
+      "DeepSeek Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Text Classifier",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Costa Rica": {
+        "main": [
+          [
+            {
+              "node": "Append row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Argentina": {
+        "main": [
+          [
+            {
+              "node": "Agrega contacos de la web a Leads Allpol",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Switch1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch1": {
+        "main": [
+          [
+            {
+              "node": "Smart CR",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Malco CR",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Allpol",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "Argentina2": {
+        "main": [
+          []
+        ]
+      },
+      "Argentina1": {
+        "main": [
+          []
+        ]
+      },
+      "Alejandro": {
+        "main": [
+          []
+        ]
+      },
+      "Agrega contacos de la web a Leads Allpol": {
+        "main": [
+          []
+        ]
+      },
+      "Append row in sheet": {
+        "main": [
+          []
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "If2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Busca Lead en registros",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Leads sin notificar",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "A mi de prueba",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Diario": {
+        "main": [
+          [
+            {
+              "node": "Lista profesionales",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "A mi de prueba": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Anthropic Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Lista profesionales": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Enviar texto",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Leads sin notificar": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "cambia a notificado",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "cambia a notificado": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Create a record": {
+        "main": [
+          [
+            {
+              "node": "Mensaje a Profesional",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Busca profesional": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "Busca Lead en registros": {
+        "main": [
+          [
+            {
+              "node": "Es Lead unico?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Es Lead unico?": {
+        "main": [
+          [
+            {
+              "node": "Create a record",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If2": {
+        "main": [
+          [
+            {
+              "node": "Busca profesional",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Text Classifier",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "malco fernandez",
+    "name": null,
+    "description": null
+  }
+}

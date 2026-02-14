@@ -1,0 +1,11 @@
+Reading workflow definition...
+Postgres node found. Cleaning credentials for manual selection...
+Updating workflow M41AzCPlhql4OhOe with Postgres node...
+Update Result:
+{
+  "success": false,
+  "error": "request/body must NOT have additional properties",
+  "message": "Failed to update workflow M41AzCPlhql4OhOe: request/body must NOT have additional properties",
+  "statusCode": 400
+}
+❌ Failed to update workflow: request/body must NOT have additional properties

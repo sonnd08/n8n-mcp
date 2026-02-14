@@ -1,0 +1,4 @@
+Listing all workflows...
+Found 2 ARES workflows:
+- ARES Protocol: Main Chat Handler (ID: 0uvjFiHr4BMW0m5a, Active: false)
+- ARES Protocol: Cron Jobs (ID: XhOiaeNjrOQo0mTa, Active: false)
