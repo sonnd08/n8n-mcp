@@ -1,5 +1,18 @@
 # n8n MCP Server
 
+> [!IMPORTANT]
+> **This repository is archived and no longer maintained.**
+>
+> For an actively maintained n8n MCP integration, use
+> [czlonkowski/n8n-mcp](https://github.com/czlonkowski/n8n-mcp).
+>
+> Depending on your use case, accessing n8n directly through its API with an API
+> key—or using carefully scoped direct database access—may be a simpler, more
+> straightforward solution than running a separate MCP server. The focused
+> workflow-building guidance in
+> [czlonkowski/n8n-skills](https://github.com/czlonkowski/n8n-skills) may also be
+> useful alongside your chosen access method.
+
 A comprehensive **Model Context Protocol (MCP) server** that provides AI assistants with direct access to your n8n automation platform. This server enables seamless integration between AI tools (like Claude Desktop) and n8n workflows, variables, credentials, and executions.
 
 ## 🚀 Features
@@ -290,4 +303,4 @@ MIT License - see LICENSE file for details.
 
 **Ready to automate with AI? 🤖✨**
 
-Your n8n workflows are now accessible to AI assistants through the Model Context Protocol! 
+Your n8n workflows are now accessible to AI assistants through the Model Context Protocol!
